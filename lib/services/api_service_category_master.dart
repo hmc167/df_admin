@@ -1,5 +1,6 @@
 import '../data/api_list.dart';
 import '../models/category_master.dart';
+import '../models/common.dart';
 import '../utils/constants.dart';
 import 'web_service_client.dart';
 
@@ -27,6 +28,19 @@ class ApiServiceCategoryMaster {
           'ParentCategoryMasterId': category.parentCategoryMasterId,
         });
     var model = SaveCategoryMasterResponse.fromJson(response!);
+    return model;
+  }
+
+  static Future<ChangeStatusResponse> changeStatus(
+    CategoryMaster category,
+    int action,
+  ) async {
+    final response = await webServiceClientAPI(
+      HTTP_POST,
+      ApiList.changeCategoryStatus,
+      {'ID': category.iD, 'Action': action},
+    );
+    var model = ChangeStatusResponse.fromJson(response!);
     return model;
   }
 }

@@ -23,3 +23,9 @@ const String HTTP_GET = "get";
 const String HTTP_DELETE = "delete";
 const String HTTP_PATCH = "patch";
 const String HTTP_PUT = "put";
+
+class ChangeStatusAction {
+  static const int activate = 1;
+  static const int deactivate = 2;
+  static const int delete = 3;
+}

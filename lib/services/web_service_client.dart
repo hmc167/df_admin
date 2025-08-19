@@ -51,10 +51,10 @@ Future<Map<String, dynamic>?> webServiceClientAPI(
   map?.addAll(mapExtra);
   Map<String, dynamic>? responseBody;
   try {
-    // if (kDebugMode) {
-    //   print(myUri);
-    //   print(header);
-    // }
+    if (kDebugMode) {
+      //   print(myUri);
+      //print(header);
+    }
     if (methodType == HTTP_POST) {
       response = await http.post(
         myUri,

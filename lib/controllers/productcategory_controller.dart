@@ -1,4 +1,5 @@
 import 'package:admin/utils/colors.dart';
+import 'package:admin/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -256,7 +257,6 @@ class ProductCategoryController extends GetxController {
 
     final result = await ApiServiceCategoryMaster.save(newCategory);
     if (result.hasError == false) {
-      await getCategories();
       clearFields();
       Get.back();
       Get.snackbar(
@@ -267,6 +267,7 @@ class ProductCategoryController extends GetxController {
         snackPosition: SnackPosition.BOTTOM,
         margin: EdgeInsets.all(10),
       );
+      await getCategories();
     } else {
       errorMessage.value =
           result.errors?.firstOrNull?.message ?? 'Error saving category';
@@ -290,17 +291,23 @@ class ProductCategoryController extends GetxController {
         confirm: CommonButton(
           width: 100,
           text: "Delete",
-          onTap: () {
-            Get.back();
-
-            Get.snackbar(
-              'Success',
-              'Category deleted successfully',
-              backgroundColor: Colors.greenAccent,
-              colorText: Colors.white,
-              snackPosition: SnackPosition.BOTTOM,
-              margin: EdgeInsets.all(10),
+          onTap: () async {
+            final result = await ApiServiceCategoryMaster.changeStatus(
+              category,
+              ChangeStatusAction.delete,
             );
+            if (result.data == true) {
+              Get.back();
+              Get.snackbar(
+                'Success',
+                'Category deleted successfully',
+                backgroundColor: Colors.greenAccent,
+                colorText: Colors.white,
+                snackPosition: SnackPosition.BOTTOM,
+                margin: EdgeInsets.all(10),
+              );
+              await getCategories();
+            }
           },
         ),
         cancel: CommonButton(
