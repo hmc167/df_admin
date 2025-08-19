@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:admin/services/storage_service.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../utils/constants.dart';
@@ -20,17 +19,15 @@ Future<Map<String, dynamic>?> webServiceClientAPI(
   var header = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
-    //'Content-Type': 'application/x-www-form-urlencoded'
   };
 
   try {
     if (isAuthentication == true) {
-      var token = StorageService.getToken();
+      var token = await StorageService.getToken();
 
       header = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        //'Content-Type': 'application/x-www-form-urlencoded',
         'Authorization': 'Bearer $token',
       };
     }
@@ -54,6 +51,10 @@ Future<Map<String, dynamic>?> webServiceClientAPI(
   map?.addAll(mapExtra);
   Map<String, dynamic>? responseBody;
   try {
+    // if (kDebugMode) {
+    //   print(myUri);
+    //   print(header);
+    // }
     if (methodType == HTTP_POST) {
       response = await http.post(
         myUri,
@@ -65,13 +66,10 @@ Future<Map<String, dynamic>?> webServiceClientAPI(
         ),
       );
     } else if (methodType == "get") {
-      //print("APIRequest", url.toString());
       response = await http.get(myUri, headers: header);
     } else if (methodType == HTTP_DELETE) {
-      //print("APIRequest", url.toString());
       response = await http.delete(myUri, headers: header);
     } else if (methodType == HTTP_PATCH) {
-      //print("APIRequest", map!.entries.toList().toString());
       response = await http.patch(myUri, headers: header, body: map);
     }
 
@@ -86,7 +84,9 @@ Future<Map<String, dynamic>?> webServiceClientAPI(
     }
 
     var statusCode = response!.statusCode;
-
+    // if (kDebugMode) {
+    //   print(statusCode);
+    // }
     if (statusCode == WS_STATUSCODE_UNAUTHORIZED_401) {
       //
     } else {

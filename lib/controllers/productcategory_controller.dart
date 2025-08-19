@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import '../models/product_category.dart';
+import '../models/category_master.dart';
+import '../services/api_service_category_master.dart';
 import '../utils/helpers.dart';
 import '../widgets/common_button.dart';
 
@@ -28,40 +29,16 @@ class ProductCategoryController extends GetxController {
 
   final errorMessage = ''.obs;
 
-  List<ProductCategory> get parentCategories => getParentCategories();
-
-  RxList<ProductCategory> categories = <ProductCategory>[].obs;
+  RxList<CategoryMaster> categories = <CategoryMaster>[].obs;
+  RxList<CategoryMaster> parentCategories = <CategoryMaster>[].obs;
 
   @override
   void onInit() {
     super.onInit();
-    categories.value = getCategories();
+    getCategories();
     Future.delayed(Duration(milliseconds: 300), () {
       nameFocusNode.requestFocus();
     });
-  }
-
-  List<ProductCategory> getParentCategories() {
-    return [
-      ProductCategory(
-        iD: 0,
-        name: 'No Parent Category',
-        parentCategoryID: null,
-        status: true,
-      ),
-      ProductCategory(
-        iD: 1,
-        name: 'Daily Fresh',
-        parentCategoryID: null,
-        status: true,
-      ),
-      ProductCategory(
-        iD: 5,
-        name: 'Seasonal Store',
-        parentCategoryID: null,
-        status: true,
-      ),
-    ];
   }
 
   void toggleStatus() {
@@ -77,13 +54,13 @@ class ProductCategoryController extends GetxController {
     nameFocusNode.requestFocus();
   }
 
-  Future<void> openAddCategoryPopup(ProductCategory category) async {
+  Future<void> openAddCategoryPopup(CategoryMaster category) async {
     int categoryId = category.iD ?? 0;
     nameController.text = category.name ?? '';
-    descriptionController.text = category.description ?? '';
+    descriptionController.text = category.desc ?? '';
     sortOrderController.text = category.sortOrder?.toString() ?? '';
-    status.value = category.status ?? false;
-    parentCategoryId.value = category.parentCategoryID ?? 0;
+    status.value = category.isActive ?? false;
+    parentCategoryId.value = category.parentCategoryMasterId ?? 0;
 
     await Helpers.showPopup(
       Column(
@@ -257,7 +234,7 @@ class ProductCategoryController extends GetxController {
     );
   }
 
-  void saveCategory(int categoryId) {
+  Future<void> saveCategory(int categoryId) async {
     if (nameController.text.isEmpty) {
       errorMessage.value = 'Name cannot be empty';
       return;
@@ -268,29 +245,36 @@ class ProductCategoryController extends GetxController {
       return;
     }
 
-    final newCategory = ProductCategory(
+    final newCategory = CategoryMaster(
       iD: categoryId,
       name: nameController.text,
-      description: descriptionController.text,
-      parentCategoryID: parentCategoryId.value,
+      desc: descriptionController.text,
+      parentCategoryMasterId: parentCategoryId.value,
       sortOrder: int.tryParse(sortOrderController.text) ?? 0,
-      status: status.value,
+      isActive: status.value,
     );
 
-    print('Saving category: ${newCategory.toJson()}');
-    clearFields();
-    Get.back();
-    Get.snackbar(
-      'Success',
-      'Category saved successfully',
-      backgroundColor: Colors.greenAccent,
-      colorText: Colors.white,
-      snackPosition: SnackPosition.BOTTOM,
-      margin: EdgeInsets.all(10),
-    );
+    final result = await ApiServiceCategoryMaster.save(newCategory);
+    if (result.hasError == false) {
+      await getCategories();
+      clearFields();
+      Get.back();
+      Get.snackbar(
+        'Success',
+        'Category saved successfully',
+        backgroundColor: Colors.greenAccent,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+        margin: EdgeInsets.all(10),
+      );
+    } else {
+      errorMessage.value =
+          result.errors?.firstOrNull?.message ?? 'Error saving category';
+      return;
+    }
   }
 
-  void deleteCategory(ProductCategory category) {
+  void deleteCategory(CategoryMaster category) {
     if (category.iD != null) {
       Get.defaultDialog(
         backgroundColor: AppColors.textColorWhite,
@@ -344,73 +328,57 @@ class ProductCategoryController extends GetxController {
     }
   }
 
-  List<ProductCategory> getCategories() {
-    return [
-      ProductCategory(
-        iD: 1,
-        name: 'Daily Fresh',
-        parentCategoryID: null,
-        status: true,
-        description: 'Fresh produce delivered daily',
-        sortOrder: 1,
-      ),
-      ProductCategory(
-        iD: 2,
-        name: 'Vegetables',
-        parentCategoryID: 1,
-        status: true,
-        description: 'Fresh and organic vegetables',
-        sortOrder: 1,
-      ),
-      ProductCategory(
-        iD: 3,
-        name: 'Fruits',
-        parentCategoryID: 1,
-        status: true,
-        description: 'Seasonal and exotic fruits',
-        sortOrder: 2,
-      ),
-      ProductCategory(
-        iD: 4,
-        name: 'Pooja Needs',
-        parentCategoryID: 1,
-        status: false,
-        description: 'All your pooja essentials',
-        sortOrder: 3,
-      ),
-      ProductCategory(
-        iD: 5,
-        name: 'Seasonal Store',
-        parentCategoryID: null,
-        status: true,
-        description: 'Special items for the season',
-        sortOrder: 2,
-      ),
-    ];
+  Future<void> getCategories() async {
+    final result = await ApiServiceCategoryMaster.all();
+    if (result.hasError == false) {
+      var dbCategories = result.data?.records ?? [];
+      if (dbCategories.isNotEmpty) {
+        categories.value = dbCategories;
+        var pCats = [
+          CategoryMaster(
+            iD: 0,
+            name: 'No Parent Category',
+            parentCategoryMasterId: null,
+            isActive: true,
+          ),
+        ];
+        pCats.addAll(
+          dbCategories
+              .where((c) => (c.parentCategoryMasterId ?? 0) == 0)
+              .toList(),
+        );
+        parentCategories.value = pCats;
+      }
+    } else {
+      errorMessage.value =
+          result.errors?.firstOrNull?.message ?? 'No record found';
+    }
   }
 
-  void resetSearchFilters() {
+  Future<void> resetSearchFilters() async {
     filterNameController.clear();
     filterParentCategoryId.value = 0;
     filterStatus.value = 0;
-    searchCategories();
+    await searchCategories();
   }
 
-  void searchCategories() {
+  Future<void> searchCategories() async {
+    await getCategories();
     String text = filterNameController.text;
     int value = filterParentCategoryId.value;
     int value2 = filterStatus.value;
 
-    // Implement search logic here
-    // Example: Filter categories based on name, parentCategoryId, and status
-    List<ProductCategory> filtered = getCategories().where((category) {
+    List<CategoryMaster> filtered = categories.where((category) {
       final matchesName =
           text.isEmpty ||
           (category.name?.toLowerCase().contains(text.toLowerCase()) ?? false);
-      final matchesParent = value == 0 || category.parentCategoryID == value;
+      final matchesParent =
+          value == 0 || category.parentCategoryMasterId == value;
       final matchesStatus =
           value2 == 0 ||
-          (value2 == 1 ? category.status == true : category.status == false);
+          (value2 == 1
+              ? category.isActive == true
+              : category.isActive == false);
       return matchesName && matchesParent && matchesStatus;
     }).toList();
     categories.value = filtered;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../services/api_service.dart';
+import '../services/api_service_login.dart';
 import '../routes/app_pages.dart';
 import '../services/storage_service.dart';
 
@@ -45,7 +45,7 @@ class LoginController extends GetxController {
     //   return;
     // }
 
-    final result = await ApiService.login(username, password);
+    final result = await ApiServiceLogin.login(username, password);
     if (result.hasError == false) {
       var token = result.data?.tokenDetails?.token;
       if (token != null) {

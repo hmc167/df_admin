@@ -1,3 +1,4 @@
+import 'package:admin/models/category_master.dart';
 import 'package:admin/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -108,7 +109,7 @@ class _ProductCategoryViewState extends State<ProductCategoryView> {
                     text: 'Add New',
                     icon: Icons.add,
                     onTap: () async {
-                      await controller.openAddCategoryPopup(ProductCategory());
+                      await controller.openAddCategoryPopup(CategoryMaster());
                     },
                   ),
                 ],
@@ -205,14 +206,14 @@ class _ProductCategoryViewState extends State<ProductCategoryView> {
                             Expanded(
                               child: SizedBox(
                                 child: Text(
-                                  category.parentCategoryID == null ||
-                                          category.parentCategoryID == 0
+                                  category.parentCategoryMasterId == null ||
+                                          category.parentCategoryMasterId == 0
                                       ? '--'
                                       : controller.parentCategories
                                                 .firstWhere(
                                                   (c) =>
                                                       c.iD ==
-                                                      category.parentCategoryID,
+                                                      category.parentCategoryMasterId,
                                                 )
                                                 .name ??
                                             '',
@@ -237,7 +238,7 @@ class _ProductCategoryViewState extends State<ProductCategoryView> {
                                   width: 80,
                                   child: Align(
                                     alignment: Alignment.center,
-                                    child: category.status == true
+                                    child: category.isActive == true
                                         ? Icon(
                                             Icons.check_circle,
                                             color: AppColors.successColor,
