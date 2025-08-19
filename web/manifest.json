@@ -1,6 +1,6 @@
 {
-    "name": "df_admin",
-    "short_name": "df_admin",
+    "name": "admin",
+    "short_name": "admin",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

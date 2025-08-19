@@ -1,25 +1,30 @@
-import 'package:df_admin/screen/app.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'controllers/login_controller.dart';
+import 'routes/app_pages.dart';
+
+final LoginController loginController = Get.put(LoginController());
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MyApp());
 
-  runApp(const MyApp());
+  doWhenWindowReady(() {
+    final win = appWindow;
+    win.maximize();
+    win.show();
+  });
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Dhanfuliya Fresh Admin',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
-      ),
-      home: const LoginScreen(),
+      initialRoute: AppPages.initial,
+      getPages: AppPages.routes,
     );
   }
 }
