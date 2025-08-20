@@ -1,13 +1,9 @@
 import 'package:admin/models/category_master.dart';
 import 'package:admin/utils/colors.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../controllers/productcategory_controller.dart';
-import '../models/product_category.dart';
-import '../utils/helpers.dart';
 import '../widgets/appbar.dart';
 import '../widgets/common_button.dart';
 
@@ -213,7 +209,8 @@ class _ProductCategoryViewState extends State<ProductCategoryView> {
                                                 .firstWhere(
                                                   (c) =>
                                                       c.iD ==
-                                                      category.parentCategoryMasterId,
+                                                      category
+                                                          .parentCategoryMasterId,
                                                 )
                                                 .name ??
                                             '',

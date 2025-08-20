@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/dashboard_controller.dart';
 import '../routes/app_pages.dart';
+import '../utils/colors.dart';
 import '../widgets/appbar.dart';
 
 class DashboardView extends StatefulWidget {
@@ -14,7 +15,7 @@ class DashboardView extends StatefulWidget {
 
 class _DashboardViewState extends State<DashboardView> {
   final DashboardController controller = Get.put(DashboardController());
-  @override 
+  @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double cardWidth = width > 600 ? ((width - 62) / 2) : (width - 32);
@@ -22,6 +23,7 @@ class _DashboardViewState extends State<DashboardView> {
     return Scaffold(
       drawer: getAppDrawer(),
       appBar: getAppBar(),
+      backgroundColor: AppColors.backgroundColor,
       body: Container(
         padding: const EdgeInsets.all(16.0),
         child: Column(

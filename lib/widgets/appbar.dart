@@ -194,20 +194,6 @@ Widget getAppDrawer() {
           ),
           children: [
             ListTile(
-              title: Text(
-                'Delivery Zone (Cluster)',
-                style: TextStyle(color: Colors.black),
-              ),
-              onTap: () {
-                loginController.selectMenu('Customers-Cluster');
-                // Replace with your route for Cluster
-                Get.offAllNamed(Routes.DELIVERYZONE);
-              },
-              selected:
-                  loginController.selectedMenu.value == 'Customers-Cluster',
-              selectedTileColor: Colors.blueGrey[100],
-            ),
-            ListTile(
               title: Text('Customers', style: TextStyle(color: Colors.black)),
               onTap: () {
                 loginController.selectMenu('Customers-Customers');
@@ -375,6 +361,20 @@ Widget getAppDrawer() {
             'Settings',
           ),
           children: [
+            ListTile(
+              title: Text(
+                'Delivery Zone (Cluster)',
+                style: TextStyle(color: Colors.black),
+              ),
+              onTap: () {
+                loginController.selectMenu('Customers-Cluster');
+                // Replace with your route for Cluster
+                Get.offAllNamed(Routes.DELIVERYZONE);
+              },
+              selected:
+                  loginController.selectedMenu.value == 'Customers-Cluster',
+              selectedTileColor: Colors.blueGrey[100],
+            ),
             ListTile(
               title: Text(
                 'Cluster Wise Platform Fees',
