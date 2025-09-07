@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../services/api_service_login.dart';
@@ -19,6 +20,8 @@ class LoginController extends GetxController {
   void onInit() {
     super.onInit();
     // Set initial focus to username field
+    usernameController.text = '1234567890';
+    passwordController.text = 'Test@123';
     Future.delayed(Duration(milliseconds: 300), () {
       usernameFocusNode.requestFocus();
     });
@@ -32,10 +35,10 @@ class LoginController extends GetxController {
     final username = usernameController.text.trim();
     final password = passwordController.text;
     if (username == '') {
-      errorMessage.value = 'Username is required';
+      errorMessage.value = 'Mobile Number is required';
       return;
     } else if (password == '') {
-      errorMessage.value = 'Username is required';
+      errorMessage.value = 'Password is required';
       return;
     }
     // else if (!RegExp(
@@ -44,17 +47,26 @@ class LoginController extends GetxController {
     //   errorMessage.value = 'Invalid password format';
     //   return;
     // }
-
-    final result = await ApiServiceLogin.login(username, password);
-    if (result.hasError == false) {
-      var token = result.data?.tokenDetails?.token;
-      if (token != null) {
-        await StorageService.saveToken(token);
-        Get.offAllNamed(Routes.DASHBOARD);
-      }
-    } else {
-      errorMessage.value =
-          result.errors?.firstOrNull?.message ?? 'Invalid username or password';
+    isLoading.value = true;
+    try {
+        final result = await ApiServiceLogin.login(username, password);
+        if (result.hasError == false) {
+          var token = result.data?.tokenDetails?.token;
+          if (token != null) {
+            await StorageService.saveToken(token);
+            Get.offAllNamed(Routes.DASHBOARD);
+          }
+        } else {
+          errorMessage.value =
+              result.errors?.firstOrNull?.message ?? 'Invalid username or password';
+        }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e) ;
+      }      
+    }
+    finally{
+      isLoading.value = false;
     }
   }
 

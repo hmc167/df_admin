@@ -8,6 +8,13 @@ class ApiList {
   
   static const String getUnitMaster = "api/UnitMaster/all";
   static const String saveUnitCategoryMaster = "api/UnitMaster/all-unit-category";
+
+  
+  static const String getProductMaster = "api/ProductMaster/get";
+  static const String getListProductMaster = "api/ProductMaster/all";
+  static const String saveProductMaster = "api/ProductMaster/insertupdate";
+  static const String changeProductStatus = "api/ProductMaster/change-status";
+  static const String saveProductVariant = "api/ProductMaster/variant-insertupdate";
   
   // ... List all API endpoints here
 }

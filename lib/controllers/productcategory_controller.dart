@@ -69,7 +69,6 @@ class ProductCategoryController extends GetxController {
   status.value = category.isActive ?? false;
   parentCategoryId.value = category.parentCategoryMasterId ?? 0;
   image.value = category.image ?? '';
-  print(category.image ?? '');
   pickedImageFile.value = null;
     await Helpers.showPopup(
   Column(

@@ -88,35 +88,52 @@ class _LoginViewState extends State<LoginView> {
                 ),
               ),
               SizedBox(height: 30),
-              SizedBox(
-                width: 250,
-                height: 50,
-                child: ElevatedButton.icon(
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(
-                      AppColors.primaryColor,
-                    ),
-                    shape: WidgetStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4),
+
+              Obx(
+                () => controller.isLoading.value
+                    ? Container(
+                        width: 250,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryColor,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: AppColors.textColorWhite,
+                          ),
+                        ),
+                      )
+                    : SizedBox(
+                        width: 250,
+                        height: 50,
+                        child: ElevatedButton.icon(
+                          style: ButtonStyle(
+                            backgroundColor: WidgetStateProperty.all(
+                              AppColors.primaryColor,
+                            ),
+                            shape: WidgetStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                            ),
+                          ),
+                          onPressed: controller.login,
+                          icon: Icon(
+                            Icons.login,
+                            size: 24,
+                            color: AppColors.textColorWhite,
+                          ),
+                          label: Text(
+                            "Login",
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: AppColors.textColorWhite,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  onPressed: controller.login,
-                  icon: Icon(
-                    Icons.login,
-                    size: 24,
-                    color: AppColors.textColorWhite,
-                  ),
-                  label: Text(
-                    "Login",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: AppColors.textColorWhite,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
               ),
               Obx(
                 () => Text(
