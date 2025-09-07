@@ -83,6 +83,7 @@ class CategoryMaster {
   int? iD;
   String? name;
   String? desc;
+  String? image;
   int? parentCategoryMasterId;
   bool? isActive;
   int? sortOrder;
@@ -95,6 +96,7 @@ class CategoryMaster {
     this.iD,
     this.name,
     this.desc,
+    this.image,
     this.parentCategoryMasterId,
     this.isActive,
     this.sortOrder,
@@ -108,6 +110,7 @@ class CategoryMaster {
     iD = json['ID'];
     name = json['Name'];
     desc = json['Desc'];
+    image = json['Image'];
     parentCategoryMasterId = json['ParentCategoryMasterId'];
     isActive = json['IsActive'];
     sortOrder = json['SortOrder'];
@@ -122,6 +125,7 @@ class CategoryMaster {
     data['ID'] = iD;
     data['Name'] = name;
     data['Desc'] = desc;
+    data['Image'] = image;
     data['ParentCategoryMasterId'] = parentCategoryMasterId;
     data['IsActive'] = isActive;
     data['SortOrder'] = sortOrder;
@@ -129,55 +133,6 @@ class CategoryMaster {
     data['CreatedDate'] = createdDate;
     data['ParentCategoryMasterName'] = parentCategoryMasterName;
     data['UpdatedDate'] = updatedDate;
-    return data;
-  }
-}
-
-class SaveCategoryMasterResponse {
-  int? data;
-  Message? message;
-  List<Message>? errors;
-  String? status;
-  bool? hasError;
-  bool? hasInfo;
-
-  SaveCategoryMasterResponse({
-    this.data,
-    this.message,
-    this.errors,
-    this.status,
-    this.hasError,
-    this.hasInfo,
-  });
-
-  SaveCategoryMasterResponse.fromJson(Map<String, dynamic> json) {
-    data = json['Data'];
-    message = json['Message'] != null
-        ? Message.fromJson(json['Message'])
-        : null;
-    if (json['Errors'] != null) {
-      errors = <Message>[];
-      json['Errors'].forEach((v) {
-        errors!.add(Message.fromJson(v));
-      });
-    }
-    status = json['Status'];
-    hasError = json['HasError'];
-    hasInfo = json['HasInfo'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['Data'] = this.data;
-    if (message != null) {
-      data['Message'] = message!.toJson();
-    }
-    if (errors != null) {
-      data['Errors'] = errors!.map((v) => v.toJson()).toList();
-    }
-    data['Status'] = status;
-    data['HasError'] = hasError;
-    data['HasInfo'] = hasInfo;
     return data;
   }
 }

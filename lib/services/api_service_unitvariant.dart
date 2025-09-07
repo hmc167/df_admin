@@ -1,41 +1,45 @@
-import 'dart:io';
-
 import '../data/api_list.dart';
-import '../models/category_master.dart';
+import '../models/unitvariant_master.dart';
 import '../models/common.dart';
 import '../utils/constants.dart';
 import 'web_service_client.dart';
 
-class ApiServiceCategoryMaster {
-  static Future<CategoryMasterModel> all() async {
+class ApiServiceUnitVariantMaster {
+  static Future<UnitVariantMaster> all() async {
     final response = await webServiceClientAPI(
       HTTP_POST,
-      ApiList.getCategoryMaster,
+      ApiList.getUnitMaster,
       {},
     );
-    var model = CategoryMasterModel.fromJson(response!);
+    var model = UnitVariantMaster.fromJson(response!);
+    return model;
+  }
+
+  static Future<UnitVariantCategoryMaster> allCategory() async {
+    final response = await webServiceClientAPI(
+      HTTP_POST,
+      ApiList.saveUnitCategoryMaster,
+      {},
+    );
+    var model = UnitVariantCategoryMaster.fromJson(response!);
     return model;
   }
 
   static Future<SaveMasterResponse> save(
-    CategoryMaster category,
+    UnitVariant unitVariant,
   ) async {
     final response =
         await webServiceClientAPI(HTTP_POST, ApiList.saveCategoryMaster, {
-          'ID': category.iD,
-          'Name': category.name,
-          'Desc': category.desc,
-          'Image': category.image,
-          'SortOrder': category.sortOrder,
-          'IsActive': category.isActive,
-          'ParentCategoryMasterId': category.parentCategoryMasterId,
+          'ID': unitVariant.iD,
+          'Name': unitVariant.name,
+          'SortOrder': unitVariant.sortOrder
         });
     var model = SaveMasterResponse.fromJson(response!);
     return model;
   }
 
   static Future<ChangeStatusResponse> changeStatus(
-    CategoryMaster category,
+    UnitVariant category,
     int action,
   ) async {
     final response = await webServiceClientAPI(
@@ -47,10 +51,4 @@ class ApiServiceCategoryMaster {
     return model;
   }
 
-  static Future<FileUploadResponse> uploadFile(File file
-  ) async {
-    final response = await webServiceUploadFile(file);
-    var model = FileUploadResponse.fromJson(response!);
-    return model;
-  }
 }

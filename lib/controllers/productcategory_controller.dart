@@ -3,6 +3,8 @@ import 'package:admin/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
 
 import '../models/category_master.dart';
@@ -10,7 +12,8 @@ import '../services/api_service_category_master.dart';
 import '../utils/helpers.dart';
 import '../widgets/common_button.dart';
 
-class ProductCategoryController extends GetxController {
+class ProductCategoryController extends GetxController {  
+  final pickedImageFile = Rx<File?>(null);
   final filterNameController = TextEditingController();
   final filterParentCategoryId = 0.obs;
   final filterStatus = 0.obs;
@@ -20,6 +23,7 @@ class ProductCategoryController extends GetxController {
   final sortOrderController = TextEditingController();
   final status = false.obs;
   final parentCategoryId = 0.obs;
+  final image = "".obs;
 
   final nameFocusNode = FocusNode();
   final parentCategoryFocusNode = FocusNode();
@@ -47,24 +51,28 @@ class ProductCategoryController extends GetxController {
   }
 
   void clearFields() {
-    nameController.clear();
-    descriptionController.clear();
-    sortOrderController.clear();
-    status.value = false;
-    parentCategoryId.value = 0;
-    nameFocusNode.requestFocus();
+  nameController.clear();
+  descriptionController.clear();
+  sortOrderController.clear();
+  status.value = false;
+  parentCategoryId.value = 0;
+  nameFocusNode.requestFocus();
+  image.value = "";
+  pickedImageFile.value = null;
   }
 
   Future<void> openAddCategoryPopup(CategoryMaster category) async {
-    int categoryId = category.iD ?? 0;
-    nameController.text = category.name ?? '';
-    descriptionController.text = category.desc ?? '';
-    sortOrderController.text = category.sortOrder?.toString() ?? '';
-    status.value = category.isActive ?? false;
-    parentCategoryId.value = category.parentCategoryMasterId ?? 0;
-
+  int categoryId = category.iD ?? 0;
+  nameController.text = category.name ?? '';
+  descriptionController.text = category.desc ?? '';
+  sortOrderController.text = category.sortOrder?.toString() ?? '';
+  status.value = category.isActive ?? false;
+  parentCategoryId.value = category.parentCategoryMasterId ?? 0;
+  image.value = category.image ?? '';
+  print(category.image ?? '');
+  pickedImageFile.value = null;
     await Helpers.showPopup(
-      Column(
+  Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -82,6 +90,7 @@ class ProductCategoryController extends GetxController {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: Column(
                 children: [
+                 
                   Row(
                     spacing: 20,
                     children: [
@@ -132,18 +141,71 @@ class ProductCategoryController extends GetxController {
                     ],
                   ),
                   SizedBox(height: 20),
-                  TextFormField(
-                    controller: descriptionController,
-                    decoration: InputDecoration(
-                      hintText: 'Description',
-                      labelText: 'Description',
-                      border: OutlineInputBorder(),
-                      alignLabelWithHint: true,
-                    ),
-                    keyboardType: TextInputType.text,
-                    textAlign: TextAlign.start,
-
-                    maxLines: 4,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: descriptionController,
+                          decoration: InputDecoration(
+                            hintText: 'Description',
+                            labelText: 'Description',
+                            border: OutlineInputBorder(),
+                            alignLabelWithHint: true,
+                          ),
+                          keyboardType: TextInputType.text,
+                          textAlign: TextAlign.start,
+                        
+                          maxLines: 4,
+                        ),
+                      ),
+                      SizedBox(width: 10,),
+                      Obx(() {
+                        final imgFile = pickedImageFile.value;
+                        final imgUrl = image.value;
+                        return Column(
+                          children: [
+                            Container(
+                              width: 100,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: AppColors.primaryColor),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: imgFile != null
+                                  ? Image.file(imgFile, fit: BoxFit.cover)
+                                  : (imgUrl.isNotEmpty
+                                      ? Image.network(imgUrl, fit: BoxFit.cover)
+                                      : Icon(Icons.image, size: 50, color: Colors.grey)),
+                            ),
+                            SizedBox(height: 8),
+                            ElevatedButton.icon(
+                              icon: Icon(Icons.upload),
+                              label: Text('Choose Image'),
+                              onPressed: () async {
+                                final picker = ImagePicker();
+                                final picked = await picker.pickImage(source: ImageSource.gallery);
+                                if (picked != null) {
+                                  pickedImageFile.value = File(picked.path);
+                                  final result = await ApiServiceCategoryMaster.uploadFile(File(picked.path));
+                                  if(result.hasError == false) {
+                                    image.value = result.data?.fileKey??'';
+                                  } else {
+                                    Get.snackbar(
+                                      'Upload Error',
+                                      result.errors?.firstOrNull?.message ?? 'Error uploading image',
+                                      backgroundColor: Colors.redAccent,
+                                      colorText: Colors.white,
+                                      snackPosition: SnackPosition.BOTTOM,
+                                      margin: EdgeInsets.all(10),
+                                    );
+                                  }
+                                }
+                              },
+                            ),
+                          ],
+                        );
+                      }),
+                    ],
                   ),
                   SizedBox(height: 20),
                   Row(
@@ -246,6 +308,12 @@ class ProductCategoryController extends GetxController {
       return;
     }
 
+    //String? imagePath 
+    // if (pickedImageFile.value != null) {
+    //   imagePath = pickedImageFile.value!.path;
+    // } else {
+    //   imagePath = image.value;
+    // }
     final newCategory = CategoryMaster(
       iD: categoryId,
       name: nameController.text,
@@ -253,6 +321,7 @@ class ProductCategoryController extends GetxController {
       parentCategoryMasterId: parentCategoryId.value,
       sortOrder: int.tryParse(sortOrderController.text) ?? 0,
       isActive: status.value,
+      image: image.value,
     );
 
     final result = await ApiServiceCategoryMaster.save(newCategory);

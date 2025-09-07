@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:path/path.dart';
 
 import 'package:admin/services/storage_service.dart';
 import 'package:flutter/foundation.dart';
@@ -176,4 +177,43 @@ class MyHttpOverrides extends HttpOverrides {
       ..badCertificateCallback =
           (X509Certificate cert, String host, int port) => true;
   }
+}
+
+Future<Map<String, dynamic>?> webServiceUploadFile(
+    File file) async {
+ try {
+     var token = await StorageService.getToken();
+
+    var reqHeaders = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    final uri = Uri.parse('${AppConstants.apiBaseUrl}api/Helper/addinlocalstorage');
+    
+    var request = http.MultipartRequest('POST', uri);
+
+    request.headers.addAll(reqHeaders);
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        'file',
+        file.path,
+        filename: basename(file.path),
+      ),
+    );
+    request.fields.addAll({
+      "Device": "1",
+      "DeviceVersion": "1.0",
+      if (Platform.isWindows) "DeviceID": Platform.localHostname,
+      if (Platform.isWindows) "DeviceName": Platform.operatingSystem,
+    });
+    var streamedResponse = await request.send();
+    var responseBody = json.decode(await (streamedResponse.stream).bytesToString());
+    return responseBody;
+  
+  } catch (e, s) {
+      if (kDebugMode) {
+        print("$e\n$s");
+      }
+  }
+ return null;
 }
