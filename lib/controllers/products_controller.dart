@@ -16,6 +16,7 @@ import '../utils/colors.dart';
 import '../utils/constants.dart';
 import '../utils/helpers.dart';
 import '../widgets/common_button.dart';
+import '../widgets/product_variant_popup.dart';
 
 class ProductsController extends GetxController {
   final pickedImageFile = Rx<File?>(null);
@@ -864,7 +865,7 @@ class ProductsController extends GetxController {
         return;
       }
 
-      List<ClusterMappings> clusterMappings = [];
+      //List<ClusterMappings> clusterMappings = [];
       final newProduct = ProductMaster(
         iD: productId,
         name: nameController.text,
@@ -881,7 +882,7 @@ class ProductsController extends GetxController {
         minOrderQty: 0,
         sortOrder: int.tryParse(sortOrderController.text) ?? 0,
         isActive: status.value,
-        productClusterMappings: clusterMappings,
+        productClusterMappings: clusterMappings.value,
         productImages: imagesList.value,
       );
 
@@ -1055,7 +1056,27 @@ class ProductsController extends GetxController {
   Future<void> openManageProductVariantPopup(ProductMaster product) async {
     int productId = product.iD ?? 0;
     if (productId > 0) {
-      //
+      var productVariants =  await ApiServiceProductMaster.getVarients(
+        productId,
+      );
+      if(productVariants.hasError == false){
+        Helpers.showPopup(
+          ProductVariantPopup(
+            product: product,
+            clusterVariants: productVariants.data?.records ?? [],
+          ),
+          width: 900,
+        );
+      } else {
+        Get.snackbar(
+          'Error',
+          productVariants.errors?.firstOrNull?.message ?? 'Error loading variants',
+          backgroundColor: Colors.redAccent,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+          margin: EdgeInsets.all(10),
+        );
+      }
     }
   }
 }

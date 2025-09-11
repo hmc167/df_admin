@@ -62,9 +62,26 @@ class _SuggestsProductViewState extends State<SuggestsProductView> {
                       dropdownColor: Colors.white,
                       items: [
                         DropdownMenuItem(value: -1, child: Text('All')),
-                        DropdownMenuItem(value: 0, child: Text(statusString(0))),
-                        DropdownMenuItem(value: 1, child: Text(statusString(1))),
-                        DropdownMenuItem(value: 2, child: Text(statusString(2))),
+                        DropdownMenuItem(
+                          value: 0,
+                          child: Text(statusString(0)),
+                        ),
+                        DropdownMenuItem(
+                          value: 1,
+                          child: Text(statusString(1)),
+                        ),
+                        DropdownMenuItem(
+                          value: 2,
+                          child: Text(statusString(2)),
+                        ),
+                        DropdownMenuItem(
+                          value: 3,
+                          child: Text(statusString(3)),
+                        ),
+                        DropdownMenuItem(
+                          value: 4,
+                          child: Text(statusString(4)),
+                        ),
                       ],
                       onChanged: (value) {
                         controller.filterStatus.value = value ?? 0;
@@ -181,7 +198,7 @@ class _SuggestsProductViewState extends State<SuggestsProductView> {
                                   textAlign: TextAlign.left,
                                 ),
                               ),
-                            ),                            
+                            ),
                             SizedBox(
                               width: 250,
                               child: Text(
@@ -192,7 +209,7 @@ class _SuggestsProductViewState extends State<SuggestsProductView> {
                             SizedBox(
                               width: 150,
                               child: Text(
-                                suggest.createdDate??'',
+                                suggest.createdDate ?? '',
                                 textAlign: TextAlign.left,
                               ),
                             ),
@@ -208,34 +225,40 @@ class _SuggestsProductViewState extends State<SuggestsProductView> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
+                                  if (!(suggest.status == 3 || suggest.status == 4))
                                   InkWell(
                                     onTap: () async {
-                                      // await controller.changeStatusSuggest(
-                                      //   suggest,
-                                      // );
+                                      await controller.changeStatusSuggest(
+                                        suggest,
+                                        ((suggest.status ?? 0) + 1),
+                                      );
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Icon(
-                                        Icons.edit,
+                                        Icons.change_circle,
                                         size: 20,
                                         color: AppColors.infoColor,
                                       ),
                                     ),
                                   ),
-                                  // InkWell(
-                                  //   onTap: () {
-                                  //     controller.deleteSuggest(suggest);
-                                  //   },
-                                  //   child: Padding(
-                                  //     padding: const EdgeInsets.all(8.0),
-                                  //     child: Icon(
-                                  //       Icons.delete,
-                                  //       size: 20,
-                                  //       color: AppColors.errorColor,
-                                  //     ),
-                                  //   ),
-                                  // ),
+                                  if (suggest.status == 0)
+                                    InkWell(
+                                      onTap: () async {
+                                        await controller.changeStatusSuggest(
+                                          suggest,
+                                          4,
+                                        );
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Icon(
+                                          Icons.cancel,
+                                          size: 20,
+                                          color: AppColors.errorColor,
+                                        ),
+                                      ),
+                                    ),
                                 ],
                               ),
                             ),
@@ -269,15 +292,19 @@ class _SuggestsProductViewState extends State<SuggestsProductView> {
   }
 
   String statusString(int status) {
-  switch (status) {
-    case 0:
-      return 'New';
-    case 1:
-      return 'In Review';
-    case 2:
-      return 'Approved (Added)';
-    default:
-      return 'Unknown';
+    switch (status) {
+      case 0:
+        return 'New';
+      case 1:
+        return 'In Review';
+      case 2:
+        return 'Approved (Not Added)';
+      case 3:
+        return 'Approved (Added)';
+      case 4:
+        return 'Rejected';
+      default:
+        return 'Unknown';
+    }
   }
-}
 }

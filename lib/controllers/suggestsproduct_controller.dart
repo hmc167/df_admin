@@ -23,7 +23,13 @@ class SuggestsProductController extends GetxController {
     // });
   }
 
-
+  Future<void> changeStatusSuggest(ProductSuggest suggest, int status) async {
+    errorMessage.value = '';
+    var sts = await onStatusChange(suggest.id!, status);
+    if (sts) {
+      await getSuggests();
+    }
+  }
 
   Future<void> getSuggests() async {
     int sts = filterStatus.value;
@@ -39,7 +45,7 @@ class SuggestsProductController extends GetxController {
     }
   }
 
-  Future<bool> onStatusChange(Long id, int status) async {
+  Future<bool> onStatusChange(int id, int status) async {
     final result = await ApiServiceProductMaster.changeStatusSuggests(
       id,
       ChangeStatusAction.changeStatus,
@@ -59,8 +65,9 @@ class SuggestsProductController extends GetxController {
     }
     return false;
   }
+
   Future<void> resetSearchFilters() async {
-    filterStatus.value = 0;
+    filterStatus.value = -1;
     await searchSuggests();
   }
 
@@ -69,9 +76,7 @@ class SuggestsProductController extends GetxController {
     int sts = filterStatus.value;
 
     List<ProductSuggest> filtered = suggests.where((suggest) {
-      final matchesStatus =
-          sts == -1 ||
-          (suggest.status == sts);
+      final matchesStatus = sts == -1 || (suggest.status == sts);
       return matchesStatus;
     }).toList();
     suggests.value = filtered;

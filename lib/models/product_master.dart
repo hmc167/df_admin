@@ -207,13 +207,13 @@ class ProductMaster {
     if (json['ProductClusterMappings'] != null) {
       productClusterMappings = <ClusterMappings>[];
       json['ProductClusterMappings'].forEach((v) {
-        productClusterMappings!.add(new ClusterMappings.fromJson(v));
+        productClusterMappings!.add(ClusterMappings.fromJson(v));
       });
     }
     if (json['ProductImages'] != null) {
       productImages = <ProductImages>[];
       json['ProductImages'].forEach((v) {
-        productImages!.add(new ProductImages.fromJson(v));
+        productImages!.add(ProductImages.fromJson(v));
       });
     }
   }
@@ -254,7 +254,7 @@ class ProductMaster {
 }
 
 class ClusterMappings {
-  int? clusterMappingId;
+  int? iD;
   String? name;
   int? clusterMasterId;
   bool? isOutOfStock;
@@ -263,7 +263,7 @@ class ClusterMappings {
   int? sortOrder;
 
   ClusterMappings({
-    this.clusterMappingId,
+    this.iD,
     this.name,
     this.clusterMasterId,
     this.isOutOfStock,
@@ -273,7 +273,7 @@ class ClusterMappings {
   });
 
   ClusterMappings.fromJson(Map<String, dynamic> json) {
-    clusterMappingId = json['ClusterMappingId'];
+    iD = json['Id'];
     name = json['Name'];
     clusterMasterId = json['ClusterMasterId'];
     isOutOfStock = json['IsOutOfStock'];
@@ -283,8 +283,8 @@ class ClusterMappings {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['ClusterMappingId'] = clusterMappingId;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['Id'] = iD;
     data['Name'] = name;
     data['ClusterMasterId'] = clusterMasterId;
     data['IsOutOfStock'] = isOutOfStock;
@@ -325,7 +325,7 @@ class ProductImages {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['ImageId'] = imageId;
     data['Name'] = name;
     data['Path'] = path;
