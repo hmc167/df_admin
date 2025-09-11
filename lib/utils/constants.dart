@@ -1,6 +1,6 @@
 class AppConstants {
   static const String appName = "Dhanfuliya Fresh Admin";
-  //static const String apiBaseUrl = "https://api.example.com/";
+  //static const String apiBaseUrl = "http://papi.dhanfuliyafresh.com/";
   static const String apiBaseUrl = "https://localhost:7024/";
   //static const String apiBaseUrl = "http://localhost:5000/";
   // ... other constants
@@ -29,4 +29,5 @@ class ChangeStatusAction {
   static const int activate = 1;
   static const int deactivate = 2;
   static const int delete = 3;
+  static const int changeStatus = 4;
 }

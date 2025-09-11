@@ -1,8 +1,10 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import '../data/api_list.dart';
 import '../models/common.dart';
 import '../models/product_master.dart';
+import '../models/product_suggests.dart';
 import '../utils/constants.dart';
 import 'web_service_client.dart';
 
@@ -71,6 +73,32 @@ class ApiServiceProductMaster {
       HTTP_POST,
       ApiList.changeProductStatus,
       {'ID': product.iD, 'Action': action},
+    );
+    var model = ChangeStatusResponse.fromJson(response!);
+    return model;
+  }
+
+  static Future<ProductSuggests> allSuggests({int status = 0 }) async {
+    final response = await webServiceClientAPI(
+      HTTP_POST,
+      ApiList.getProductSuggests,
+      {
+        "Status": status,
+      },
+    );
+    var model = ProductSuggests.fromJson(response!);
+    return model;
+  }
+
+  static Future<ChangeStatusResponse> changeStatusSuggests(
+    Long iD,
+    int action,
+    int status
+  ) async {
+    final response = await webServiceClientAPI(
+      HTTP_POST,
+      ApiList.changeProductStatus,
+      {'ID': iD, 'Action': action, 'Status': status},
     );
     var model = ChangeStatusResponse.fromJson(response!);
     return model;

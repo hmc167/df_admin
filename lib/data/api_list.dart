@@ -15,6 +15,10 @@ class ApiList {
   static const String saveProductMaster = "api/ProductMaster/insertupdate";
   static const String changeProductStatus = "api/ProductMaster/change-status";
   static const String saveProductVariant = "api/ProductMaster/variant-insertupdate";
+
   
+  static const String getProductSuggests = "api/ProductMaster/suggests-all";
+  static const String changeProductSuggestsStatus = "api/ProductMaster/suggests-change-status";
+
   // ... List all API endpoints here
 }
