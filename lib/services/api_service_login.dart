@@ -1,4 +1,5 @@
 import '../data/api_list.dart';
+import '../models/dashboard_summery.dart';
 import '../models/login_response.dart';
 import '../utils/constants.dart';
 import 'web_service_client.dart';
@@ -18,4 +19,17 @@ class ApiServiceLogin {
     var model = LoginResponseModel.fromJson(response!);
     return model;
   }
+
+  static Future<DashboardDataModel> getDashboardSummary(
+  ) async {
+    final response = await webServiceClientAPI(
+      HTTP_POST,
+      ApiList.getDashboardSummary,
+      {},
+    );
+    var model = DashboardDataModel.fromJson(response!);
+    return model;
+  }
+
 }
+

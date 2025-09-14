@@ -41,7 +41,7 @@ class ApiServiceProductMaster {
     final response = await webServiceClientAPI(
       HTTP_POST,
       ApiList.getProductMaster,
-      {"ID": pid},
+      {"Id": pid},
     );
     var model = ProductMasterModel.fromJson(response!);
     return model;
@@ -117,7 +117,7 @@ class ApiServiceProductMaster {
 
   static Future<ProductVariants> getVarients(int pid) async {
     final response = await webServiceClientAPI(HTTP_POST, ApiList.getVariants, {
-      "ID": pid,
+      "Id": pid,
     });
     var model = ProductVariants.fromJson(response!);
     return model;

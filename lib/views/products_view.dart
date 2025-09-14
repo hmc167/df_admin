@@ -16,6 +16,24 @@ class ProductsView extends StatefulWidget {
 
 class _ProductsViewState extends State<ProductsView> {
   final ProductsController controller = Get.put(ProductsController());
+
+  @override
+  void initState() {
+    super.initState();
+    final args = Get.arguments;
+    if (args != null && args is Map && args['status'] != null) {
+      controller.filterStatus.value = args['status'] as int;
+      controller.searchProducts();
+    }
+    else if (args != null && args is Map && args['search'] != null) {
+      controller.filterNameController.text = args['search'] as String;
+      controller.searchProducts();
+    }
+    else{
+      controller.loadData();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

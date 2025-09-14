@@ -53,9 +53,9 @@ Future<Map<String, dynamic>?> webServiceClientAPI(
   Map<String, dynamic>? responseBody;
   try {
     if (kDebugMode) {
-      //   print(myUri);
-      //print(header);
-      //print(map);
+      // print(myUri);
+      // print(header);
+      // print(map);
     }
     if (methodType == HTTP_POST) {
       response = await http.post(

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../controllers/unitvariant_controller.dart';
 import '../utils/colors.dart';
 import '../widgets/appbar.dart';
+import '../widgets/common_button.dart';
 
 class UnitVariantView extends StatefulWidget {
   const UnitVariantView({super.key});
@@ -38,7 +39,7 @@ class _UnitVariantViewState extends State<UnitVariantView> {
                   ),
                 ],
               ),
-              width: 400,
+              width: 500,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -63,16 +64,27 @@ class _UnitVariantViewState extends State<UnitVariantView> {
                         ),
                       ),
                       SizedBox(width: 10),
-                      ElevatedButton(
-                        onPressed: controller.searchUnitVariants,
-                        child: Text('Search'),
+                      CommonButton(
+                        width: 100,
+                        text: 'Search',
+                        icon: Icons.search,
+                        onTap: () async {
+                          controller.searchUnitCategory();
+                        },
                       ),
-                      SizedBox(width: 10),
-                      ElevatedButton(
-                        onPressed: controller.resetSearchFilters,
-                        child: Text('Reset'),
+                      SizedBox(width: 8),
+                      CommonButton(
+                        width: 100,
+                        text: 'Reset',
+                        icon: Icons.refresh,
+                        color: AppColors.backgroundColor,
+                        textColor: AppColors.primaryColor,
+                        onTap: () async {
+                          // Reset search filters
+                          controller.resetSearchFiltersCategory();
+                        },
                       ),
-                      
+
                       // ElevatedButton.icon(
                       //   icon: Icon(Icons.add),
                       //   label: Text('Add Unit Variant'),
@@ -85,7 +97,10 @@ class _UnitVariantViewState extends State<UnitVariantView> {
                   SizedBox(height: 20),
                   SizedBox(height: 30),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 5,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -105,7 +120,7 @@ class _UnitVariantViewState extends State<UnitVariantView> {
                             ),
                           ),
                         ),
-              
+
                         SizedBox(
                           width: 90,
                           child: Text(
@@ -122,7 +137,9 @@ class _UnitVariantViewState extends State<UnitVariantView> {
                     child: Obx(
                       () => ListView(
                         children: [
-                          ...List.generate(controller.unitCategories.length, (index) {
+                          ...List.generate(controller.unitCategories.length, (
+                            index,
+                          ) {
                             var category = controller.unitCategories[index];
                             return Container(
                               padding: const EdgeInsets.symmetric(
@@ -136,9 +153,13 @@ class _UnitVariantViewState extends State<UnitVariantView> {
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  SizedBox(width: 40, child: Text('${index + 1}')),
+                                  SizedBox(
+                                    width: 40,
+                                    child: Text('${index + 1}'),
+                                  ),
                                   Expanded(
                                     child: SizedBox(
                                       child: Text(
@@ -147,7 +168,7 @@ class _UnitVariantViewState extends State<UnitVariantView> {
                                       ),
                                     ),
                                   ),
-              
+
                                   SizedBox(
                                     width: 90,
                                     child: Text(
@@ -181,22 +202,23 @@ class _UnitVariantViewState extends State<UnitVariantView> {
                 ],
               ),
             ),
-            Expanded(child: Container(
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: AppColors.textColorWhite,
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: Offset(0, 3), // changes position of shadow
-                  ),
-                ],
-              ),
-              
-              child: Column(
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: AppColors.textColorWhite,
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
+                ),
+
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -220,14 +242,25 @@ class _UnitVariantViewState extends State<UnitVariantView> {
                           ),
                         ),
                         SizedBox(width: 10),
-                        ElevatedButton(
-                          onPressed: controller.searchUnitVariants,
-                          child: Text('Search'),
+                        CommonButton(
+                          width: 100,
+                          text: 'Search',
+                          icon: Icons.search,
+                          onTap: () async {
+                            controller.searchUnitVariants();
+                          },
                         ),
-                        SizedBox(width: 10),
-                        ElevatedButton(
-                          onPressed: controller.resetSearchFilters,
-                          child: Text('Reset'),
+                        SizedBox(width: 8),
+                        CommonButton(
+                          width: 100,
+                          text: 'Reset',
+                          icon: Icons.refresh,
+                          color: AppColors.backgroundColor,
+                          textColor: AppColors.primaryColor,
+                          onTap: () async {
+                            // Reset search filters
+                            controller.resetSearchFilters();
+                          },
                         ),
                         Spacer(),
                         // ElevatedButton.icon(
@@ -242,7 +275,10 @@ class _UnitVariantViewState extends State<UnitVariantView> {
                     SizedBox(height: 20),
                     SizedBox(height: 30),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -277,7 +313,7 @@ class _UnitVariantViewState extends State<UnitVariantView> {
                               textAlign: TextAlign.right,
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
-                          ),                
+                          ),
                           SizedBox(
                             width: 100,
                             child: Text(
@@ -294,7 +330,9 @@ class _UnitVariantViewState extends State<UnitVariantView> {
                       child: Obx(
                         () => ListView(
                           children: [
-                            ...List.generate(controller.unitVariants.length, (index) {
+                            ...List.generate(controller.unitVariants.length, (
+                              index,
+                            ) {
                               var unitVariant = controller.unitVariants[index];
                               return Container(
                                 padding: const EdgeInsets.symmetric(
@@ -308,13 +346,19 @@ class _UnitVariantViewState extends State<UnitVariantView> {
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    SizedBox(width: 40, child: Text('${index + 1}')),
+                                    SizedBox(
+                                      width: 40,
+                                      child: Text('${index + 1}'),
+                                    ),
                                     SizedBox(
                                       width: 200,
                                       child: Text(
-                                        unitVariant.unitCategoryName?.toString() ?? '0',
+                                        unitVariant.unitCategoryName
+                                                ?.toString() ??
+                                            '0',
                                         textAlign: TextAlign.left,
                                       ),
                                     ),
@@ -326,18 +370,22 @@ class _UnitVariantViewState extends State<UnitVariantView> {
                                         ),
                                       ),
                                     ),
-                                    
+
                                     SizedBox(
                                       width: 200,
                                       child: Text(
-                                        unitVariant.multiplier?.toStringAsFixed(2) ?? '0.00',
+                                        unitVariant.multiplier?.toStringAsFixed(
+                                              2,
+                                            ) ??
+                                            '0.00',
                                         textAlign: TextAlign.right,
                                       ),
-                                    ),                
+                                    ),
                                     SizedBox(
                                       width: 100,
                                       child: Text(
-                                        unitVariant.sortOrder?.toString() ?? '0',
+                                        unitVariant.sortOrder?.toString() ??
+                                            '0',
                                         textAlign: TextAlign.center,
                                       ),
                                     ),
@@ -358,7 +406,10 @@ class _UnitVariantViewState extends State<UnitVariantView> {
                           Obx(
                             () => Text(
                               'Total Unit Variants: ${controller.unitVariants.length}',
-                              style: TextStyle(fontSize: 16, color: Colors.grey),
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey,
+                              ),
                             ),
                           ),
                         ],
@@ -366,7 +417,8 @@ class _UnitVariantViewState extends State<UnitVariantView> {
                     ),
                   ],
                 ),
-            ),)
+              ),
+            ),
           ],
         ),
       ),

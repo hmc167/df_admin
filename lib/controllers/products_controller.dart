@@ -60,12 +60,15 @@ class ProductsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    getProducts();
     getCategories();
     getUnitCategories();
     Future.delayed(Duration(milliseconds: 300), () {
       nameFocusNode.requestFocus();
     });
+  }
+
+   void loadData() {
+    getProducts();
   }
 
   void toggleStatus() {

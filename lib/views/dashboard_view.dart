@@ -15,6 +15,11 @@ class DashboardView extends StatefulWidget {
 
 class _DashboardViewState extends State<DashboardView> {
   final DashboardController controller = Get.put(DashboardController());
+
+  TextEditingController productSearchController = TextEditingController();
+  TextEditingController customerSearchController = TextEditingController();
+  TextEditingController orderSearchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -38,46 +43,58 @@ class _DashboardViewState extends State<DashboardView> {
               children: [
                 Expanded(
                   child: TextFormField(
+                    controller: productSearchController,
                     decoration: InputDecoration(
                       hintText: 'Search Product by name or code',
                       border: OutlineInputBorder(),
-                      suffixIcon: Icon(Icons.forward, color: Colors.black),
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          searchProduct();
+                        },
+                        child: Icon(Icons.forward, color: Colors.black),
+                      ),
                     ),
                     onChanged: (value) {
                       // Handle search logic here
                     },
                     onFieldSubmitted: (value) {
-                      // Handle search logic here
+                      searchProduct();
                     },
                   ),
                 ),
                 Expanded(
                   child: TextFormField(
+                    controller: customerSearchController,
                     decoration: InputDecoration(
                       hintText: 'Search Customer by name or mobile',
                       border: OutlineInputBorder(),
-                      suffixIcon: Icon(Icons.forward, color: Colors.black),
+                      suffixIcon: InkWell(onTap: () {
+                        searchCustomers();
+                      }, child: Icon(Icons.forward, color: Colors.black)),
                     ),
                     onChanged: (value) {
                       // Handle search logic here
                     },
                     onFieldSubmitted: (value) {
-                      // Handle search logic here
+                      searchCustomers();
                     },
                   ),
                 ),
                 Expanded(
                   child: TextFormField(
+                    controller: orderSearchController,
                     decoration: InputDecoration(
                       hintText: 'Search Order by number',
                       border: OutlineInputBorder(),
-                      suffixIcon: Icon(Icons.forward, color: Colors.black),
+                      suffixIcon: InkWell(onTap: () {
+                        searchOrders();
+                      }, child: Icon(Icons.forward, color: Colors.black)),
                     ),
                     onChanged: (value) {
                       // Handle search logic here
                     },
                     onFieldSubmitted: (value) {
-                      // Handle search logic here
+                      searchOrders();
                     },
                   ),
                 ),
@@ -100,84 +117,13 @@ class _DashboardViewState extends State<DashboardView> {
               ],
             ),
             SizedBox(height: 20),
-            Wrap(
-              runAlignment: WrapAlignment.start,
-              spacing: 30,
-              runSpacing: 30,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(10.0),
-                  decoration: BoxDecoration(
-                    color: Colors.blueGrey[50],
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                  width: cardWidth,
-                  height: 130,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                loginController.selectMenu(
-                                  'Orders-DailyOrders',
-                                );
-                                Get.offAllNamed(Routes.DAILYORDERS);
-                              },
-                              child: Column(
-                                children: [
-                                  Text(
-                                    '123',
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text('Total'),
-                                ],
-                              ),
-                            ),
-
-                            InkWell(
-                              onTap: () {
-                                loginController.selectMenu(
-                                  'Orders-DailyOrders',
-                                );
-                                Get.offAllNamed(Routes.DAILYORDERS);
-                              },
-                              child: Column(
-                                children: [
-                                  Text(
-                                    '60',
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text('Locked'),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Divider(),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text('Daily Order Count'),
-                      ),
-                    ],
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    loginController.selectMenu('Products-Category');
-                    Get.offAllNamed(Routes.PRODUCTCATEGORY);
-                  },
-                  child: Container(
+            Obx(
+              () => Wrap(
+                runAlignment: WrapAlignment.start,
+                spacing: 30,
+                runSpacing: 30,
+                children: [
+                  Container(
                     padding: const EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
                       color: Colors.blueGrey[50],
@@ -186,201 +132,428 @@ class _DashboardViewState extends State<DashboardView> {
                     width: cardWidth,
                     height: 130,
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Expanded(
-                          child: Center(
-                            child: Text(
-                              '20',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  loginController.selectMenu(
+                                    'Orders-DailyOrders',
+                                  );
+                                  Get.offAllNamed(Routes.DAILYORDERS);
+                                },
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      controller.dashboardData.value.totalOrder
+                                              ?.toString() ??
+                                          '0',
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text('Total'),
+                                  ],
+                                ),
                               ),
-                            ),
+
+                              InkWell(
+                                onTap: () {
+                                  loginController.selectMenu(
+                                    'Orders-DailyOrders',
+                                  );
+                                  Get.offAllNamed(Routes.DAILYORDERS);
+                                },
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      controller.dashboardData.value.lockOrder
+                                              ?.toString() ??
+                                          '0',
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text('Locked'),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         Divider(),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text('Total Category'),
+                          child: Text('Daily Order Count'),
                         ),
                       ],
                     ),
                   ),
-                ),
-
-                Container(
-                  padding: const EdgeInsets.all(10.0),
-                  decoration: BoxDecoration(
-                    color: Colors.blueGrey[50],
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                  width: cardWidth,
-                  height: 130,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                loginController.selectMenu('Products');
-                                Get.offAllNamed(Routes.PRODUCTS);
-                              },
+                  SizedBox(
+                    width: cardWidth,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              loginController.selectMenu('Products-Category');
+                              Get.offAllNamed(Routes.PRODUCTCATEGORY);
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                color: Colors.blueGrey[50],
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                              height: 130,
                               child: Column(
                                 children: [
-                                  Text(
-                                    '98',
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
+                                  Expanded(
+                                    child: Center(
+                                      child: Text(
+                                        controller
+                                                .dashboardData
+                                                .value
+                                                .totalCategory
+                                                ?.toString() ??
+                                            '0',
+                                        style: TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                  Text('Total'),
+                                  Divider(),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('Total Category'),
+                                  ),
                                 ],
                               ),
                             ),
-
-                            InkWell(
-                              onTap: () {
-                                loginController.selectMenu('Products');
-                                Get.offAllNamed(Routes.PRODUCTS);
-                              },
-                              child: Column(
-                                children: [
-                                  Text(
-                                    '88',
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text('Active'),
-                                ],
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                loginController.selectMenu('Products');
-                                Get.offAllNamed(Routes.PRODUCTS);
-                              },
-                              child: Column(
-                                children: [
-                                  Text(
-                                    '10',
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text('InActive'),
-                                ],
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                      Divider(),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text('Product Count'),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10.0),
-                  decoration: BoxDecoration(
-                    color: Colors.blueGrey[50],
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                  width: cardWidth,
-                  height: 130,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                loginController.selectMenu(
-                                  'Customers-Customers',
-                                );
-                                Get.offAllNamed(Routes.CUSTOMERS);
-                              },
+                        SizedBox(width: 30),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              loginController.selectMenu(
+                                'Customers-CustomerInquiry',
+                              );
+                              Get.offAllNamed(Routes.CUSTOMERINQUIRY);
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                color: Colors.blueGrey[50],
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                              height: 130,
                               child: Column(
                                 children: [
-                                  Text(
-                                    '98',
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
+                                  Expanded(
+                                    child: Center(
+                                      child: Text(
+                                        controller
+                                                .dashboardData
+                                                .value
+                                                .totalCustomerInquiry
+                                                ?.toString() ??
+                                            '0',
+                                        style: TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                  Text('Total'),
+                                  Divider(),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('Customer Inquiry'),
+                                  ),
                                 ],
                               ),
                             ),
-
-                            InkWell(
-                              onTap: () {
-                                loginController.selectMenu(
-                                  'Customers-Customers',
-                                );
-                                Get.offAllNamed(Routes.CUSTOMERS);
-                              },
-                              child: Column(
-                                children: [
-                                  Text(
-                                    '88',
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text('Todays register'),
-                                ],
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                loginController.selectMenu(
-                                  'Customers-CustomerInquiry',
-                                );
-                                Get.offAllNamed(Routes.CUSTOMERINQUIRY);
-                              },
-                              child: Column(
-                                children: [
-                                  Text(
-                                    '10',
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text('Pending Inquiry'),
-                                ],
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                      Divider(),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text('Customers Count'),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                  Container(
+                    padding: const EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                      color: Colors.blueGrey[50],
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                    width: cardWidth,
+                    height: 130,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  loginController.selectMenu('Products');
+                                  Get.offAllNamed(Routes.PRODUCTS);
+                                },
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      controller
+                                              .dashboardData
+                                              .value
+                                              .totalProduct
+                                              ?.toString() ??
+                                          '0',
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text('Total'),
+                                  ],
+                                ),
+                              ),
+
+                              InkWell(
+                                onTap: () {
+                                  loginController.selectMenu('Products');
+                                  Get.offAllNamed(
+                                    Routes.PRODUCTS,
+                                    arguments: {'status': 1},
+                                  );
+                                },
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      controller
+                                              .dashboardData
+                                              .value
+                                              .totalProductActive
+                                              ?.toString() ??
+                                          '0',
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text('Active'),
+                                  ],
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  loginController.selectMenu('Products');
+                                  Get.offAllNamed(
+                                    Routes.PRODUCTS,
+                                    arguments: {'status': 2},
+                                  );
+                                },
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      controller
+                                              .dashboardData
+                                              .value
+                                              .totalProductInActive
+                                              ?.toString() ??
+                                          '0',
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text('InActive'),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Divider(),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('Product Count'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                      color: Colors.blueGrey[50],
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                    width: cardWidth,
+                    height: 130,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  loginController.selectMenu(
+                                    'Customers-Customers',
+                                  );
+                                  Get.offAllNamed(Routes.CUSTOMERS);
+                                },
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      controller
+                                              .dashboardData
+                                              .value
+                                              .totalCustomer
+                                              ?.toString() ??
+                                          '0',
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text('Total'),
+                                  ],
+                                ),
+                              ),
+
+                              InkWell(
+                                onTap: () {
+                                  loginController.selectMenu(
+                                    'Customers-Customers',
+                                  );
+                                  Get.offAllNamed(
+                                    Routes.CUSTOMERS,
+                                    arguments: {'todayonly': true},
+                                  );
+                                },
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      controller
+                                              .dashboardData
+                                              .value
+                                              .totalTodayCustomer
+                                              ?.toString() ??
+                                          '0',
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text('Todays register'),
+                                  ],
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  loginController.selectMenu(
+                                    'Customers-Customers',
+                                  );
+                                  Get.offAllNamed(
+                                    Routes.CUSTOMERS,
+                                    arguments: {'approved': 1},
+                                  );
+                                },
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      controller
+                                              .dashboardData
+                                              .value
+                                              .totalCustomerApproved
+                                              ?.toString() ??
+                                          '0',
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text('Approved'),
+                                  ],
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  loginController.selectMenu(
+                                    'Customers-Customers',
+                                  );
+                                  Get.offAllNamed(
+                                    Routes.CUSTOMERS,
+                                    arguments: {'approved': 2},
+                                  );
+                                },
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      controller
+                                              .dashboardData
+                                              .value
+                                              .totalCustomerPending
+                                              ?.toString() ??
+                                          '0',
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text('Pending'),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Divider(),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('Customers Count'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void searchProduct() {
+    var searchText = productSearchController.text.trim();
+    if (searchText.isNotEmpty) {
+      loginController.selectMenu('Products');
+      Get.offAllNamed(Routes.PRODUCTS, arguments: {'search': searchText});
+    }
+  }
+
+  void searchCustomers() {
+    var searchText = customerSearchController.text.trim();
+    if (searchText.isNotEmpty) {
+      loginController.selectMenu('Customers');
+      Get.offAllNamed(Routes.CUSTOMERS, arguments: {'search': searchText});
+    }
+  }
+
+  void searchOrders() {
+    var searchText = orderSearchController.text.trim();
+    if (searchText.isNotEmpty) {
+      loginController.selectMenu('Orders');
+      Get.offAllNamed(Routes.ORDERS, arguments: {'search': searchText});
+    }
   }
 }

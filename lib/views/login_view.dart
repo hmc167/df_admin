@@ -29,7 +29,7 @@ class _LoginViewState extends State<LoginView> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Center(child: FlutterLogo(size: 200)),
+              Center(child: Image.asset("assets/images/DhanfuliyaFresh.png", width: 200)),
               SizedBox(height: 20),
               TextField(
                 focusNode: controller.usernameFocusNode,

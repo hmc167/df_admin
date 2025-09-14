@@ -53,147 +53,150 @@ class _ProductVariantPopupState extends State<ProductVariantPopup> {
               itemCount: _clusterVariants.length,
               itemBuilder: (context, index) {
                 final variant = _clusterVariants[index];
-                return Card(
+                return Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.backgroundColor,
+                    borderRadius: BorderRadius.circular(3),
+                   border: Border.all(color: Colors.grey.shade300,width: 3,),
+                  ),
                   margin: const EdgeInsets.symmetric(vertical: 6),
+                  padding: const EdgeInsets.all(8.0),
                   clipBehavior: Clip.none,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Name and SortOrder
-                        Container(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryColor.withAlpha(80),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Row(
-                            children: [
-                              const SizedBox(width: 16),
-                              Expanded(child: Text(variant.name ?? '')),
-                              Switch(
-                                value: variant.isOutOfStock ?? false,
-                                onChanged: (val) {
-                                  setState(() {
-                                    variant.isOutOfStock = val;
-                                  });
-                                },
-                              ),
-                              const Text('Out of Stock'),
-                              const SizedBox(width: 16),
-                            ],
-                          ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Name and SortOrder
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        decoration: BoxDecoration(
+                          color: AppColors.primaryColor.withAlpha(80),
+                          borderRadius: BorderRadius.circular(4),
                         ),
-                        const Divider(),
-                        // Variants grid/list
-                        if (variant.productVariants != null &&
-                            variant.productVariants!.isNotEmpty)
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Variants:',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              ListView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: variant.productVariants!.length,
-                                itemBuilder: (context, vIndex) {
-                                  final v = variant.productVariants![vIndex];
-                                  return Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          const SizedBox(width: 16),
-                                          Switch(
-                                            value: v.isActive ?? false,
+                        child: Row(
+                          children: [
+                            const SizedBox(width: 16),
+                            Expanded(child: Text(variant.name ?? '')),
+                            Switch(
+                              value: variant.isOutOfStock ?? false,
+                              onChanged: (val) {
+                                setState(() {
+                                  variant.isOutOfStock = val;
+                                });
+                              },
+                            ),
+                            const Text('Out of Stock'),
+                            const SizedBox(width: 16),
+                          ],
+                        ),
+                      ),
+                      const Divider(),
+                      // Variants grid/list
+                      if (variant.productVariants != null &&
+                          variant.productVariants!.isNotEmpty)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Variants:',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: variant.productVariants!.length,
+                              itemBuilder: (context, vIndex) {
+                                final v = variant.productVariants![vIndex];
+                                return Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        const SizedBox(width: 16),
+                                        Switch(
+                                          value: v.isActive ?? false,
+                                          onChanged: (val) {
+                                            setState(() {
+                                              v.isActive = val;
+                                            });
+                                          },
+                                        ),
+                                        const SizedBox(width: 16),
+                                        Expanded(
+                                          child: Text(v.unitName ?? ''),
+                                        ),
+                                        const SizedBox(width: 16),
+                                        SizedBox(
+                                          width: 150,
+                                          child: TextFormField(
+                                            initialValue:
+                                                v.price?.toString() ?? '',
+                                            decoration: const InputDecoration(
+                                              labelText: 'Price',
+                                            ),
+                                            keyboardType:
+                                                TextInputType.number,
                                             onChanged: (val) {
                                               setState(() {
-                                                v.isActive = val;
+                                                v.price = double.tryParse(
+                                                  val,
+                                                );
                                               });
                                             },
                                           ),
-                                          const SizedBox(width: 16),
-                                          Expanded(
-                                            child: Text(v.unitName ?? ''),
-                                          ),
-                                          const SizedBox(width: 16),
-                                          SizedBox(
-                                            width: 150,
-                                            child: TextFormField(
-                                              initialValue:
-                                                  v.price?.toString() ?? '',
-                                              decoration: const InputDecoration(
-                                                labelText: 'Price',
-                                              ),
-                                              keyboardType:
-                                                  TextInputType.number,
-                                              onChanged: (val) {
-                                                setState(() {
-                                                  v.price = double.tryParse(
-                                                    val,
-                                                  );
-                                                });
-                                              },
+                                        ),
+                                        const SizedBox(width: 16),
+                                        SizedBox(
+                                          width: 80,
+                                          child: TextFormField(
+                                            initialValue:
+                                                v.sortOrder?.toString() ?? '',
+                                            decoration: const InputDecoration(
+                                              labelText: 'Sort Order',
                                             ),
+                                            keyboardType:
+                                                TextInputType.number,
+                                            onChanged: (val) {
+                                              setState(() {
+                                                v.sortOrder = int.tryParse(
+                                                  val,
+                                                );
+                                              });
+                                            },
                                           ),
-                                          const SizedBox(width: 16),
-                                          SizedBox(
-                                            width: 80,
-                                            child: TextFormField(
-                                              initialValue:
-                                                  v.sortOrder?.toString() ?? '',
-                                              decoration: const InputDecoration(
-                                                labelText: 'Sort Order',
-                                              ),
-                                              keyboardType:
-                                                  TextInputType.number,
-                                              onChanged: (val) {
-                                                setState(() {
-                                                  v.sortOrder = int.tryParse(
-                                                    val,
-                                                  );
-                                                });
-                                              },
+                                        ),
+                                        const SizedBox(width: 16),
+                                        SizedBox(
+                                          width: 90,
+                                          child: TextFormField(
+                                            initialValue:
+                                                v.minOrderQty?.toString() ??
+                                                '',
+                                            decoration: const InputDecoration(
+                                              labelText: 'Min Order Qty',
                                             ),
+                                            keyboardType:
+                                                TextInputType.number,
+                                            onChanged: (val) {
+                                              setState(() {
+                                                v.minOrderQty = int.tryParse(
+                                                  val,
+                                                );
+                                              });
+                                            },
                                           ),
-                                          const SizedBox(width: 16),
-                                          SizedBox(
-                                            width: 90,
-                                            child: TextFormField(
-                                              initialValue:
-                                                  v.minOrderQty?.toString() ??
-                                                  '',
-                                              decoration: const InputDecoration(
-                                                labelText: 'Min Order Qty',
-                                              ),
-                                              keyboardType:
-                                                  TextInputType.number,
-                                              onChanged: (val) {
-                                                setState(() {
-                                                  v.minOrderQty = int.tryParse(
-                                                    val,
-                                                  );
-                                                });
-                                              },
-                                            ),
-                                          ),
-                                          const SizedBox(width: 16),
-                                          
-                                        ],
-                                      ),
-                                      if(vIndex != variant.productVariants!.length - 1)
-                                      Divider(),
-                                    ],
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                      ],
-                    ),
+                                        ),
+                                        const SizedBox(width: 16),
+                                        
+                                      ],
+                                    ),
+                                    if(vIndex != variant.productVariants!.length - 1)
+                                    Divider(),
+                                  ],
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                    ],
                   ),
                 );
               },
