@@ -17,7 +17,7 @@ abstract class Routes {
   static const FARMERS = '/farmers';
   static const FARMERSACCOUNT = '/farmersaccount';
   static const ORDERS = '/orders';
-  static const DAILYORDERS = '/dailyorders';
+  static const DAILYORDERS = '/dailyorders';//Used as UnLock Requests Management
   static const ADVERTISEMENTS = '/advertisements';
   static const HOMESLIDERS = '/homesliders';
   static const EXPENSECATEGORY = '/expensecategory';

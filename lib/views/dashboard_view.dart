@@ -141,9 +141,9 @@ class _DashboardViewState extends State<DashboardView> {
                               InkWell(
                                 onTap: () {
                                   loginController.selectMenu(
-                                    'Orders-DailyOrders',
+                                    'Orders',
                                   );
-                                  Get.offAllNamed(Routes.DAILYORDERS);
+                                  Get.offAllNamed(Routes.ORDERS);
                                 },
                                 child: Column(
                                   children: [
@@ -164,6 +164,28 @@ class _DashboardViewState extends State<DashboardView> {
                               InkWell(
                                 onTap: () {
                                   loginController.selectMenu(
+                                    'Orders',
+                                  );
+                                  Get.offAllNamed(Routes.ORDERS);
+                                },
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      controller.dashboardData.value.lockOrder
+                                              ?.toString() ??
+                                          '0',
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text('Locked'),
+                                  ],
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  loginController.selectMenu(
                                     'Orders-DailyOrders',
                                   );
                                   Get.offAllNamed(Routes.DAILYORDERS);
@@ -179,7 +201,7 @@ class _DashboardViewState extends State<DashboardView> {
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    Text('Locked'),
+                                    Text('UnLocked Request'),
                                   ],
                                 ),
                               ),
@@ -428,35 +450,6 @@ class _DashboardViewState extends State<DashboardView> {
                                   ],
                                 ),
                               ),
-
-                              InkWell(
-                                onTap: () {
-                                  loginController.selectMenu(
-                                    'Customers-Customers',
-                                  );
-                                  Get.offAllNamed(
-                                    Routes.CUSTOMERS,
-                                    arguments: {'todayonly': true},
-                                  );
-                                },
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      controller
-                                              .dashboardData
-                                              .value
-                                              .totalTodayCustomer
-                                              ?.toString() ??
-                                          '0',
-                                      style: TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Text('Todays register'),
-                                  ],
-                                ),
-                              ),
                               InkWell(
                                 onTap: () {
                                   loginController.selectMenu(
@@ -510,6 +503,34 @@ class _DashboardViewState extends State<DashboardView> {
                                       ),
                                     ),
                                     Text('Pending'),
+                                  ],
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  loginController.selectMenu(
+                                    'Customers-Customers',
+                                  );
+                                  Get.offAllNamed(
+                                    Routes.CUSTOMERS,
+                                    arguments: {'todayonly': true},
+                                  );
+                                },
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      controller
+                                              .dashboardData
+                                              .value
+                                              .totalTodayCustomer
+                                              ?.toString() ??
+                                          '0',
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text('Todays register'),
                                   ],
                                 ),
                               ),

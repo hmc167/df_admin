@@ -268,7 +268,7 @@ Widget getAppDrawer() {
             ),
             ListTile(
               title: Text(
-                'Daily Orders',
+                'UnLock Requests',
                 style: TextStyle(color: Colors.black),
               ),
               onTap: () {

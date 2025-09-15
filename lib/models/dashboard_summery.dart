@@ -52,6 +52,7 @@ class DashboardDataModel {
 class DashboardData {
   int? totalOrder;
   int? lockOrder;
+  int? unLockRequest;
   int? totalCategory;
   int? totalProduct;
   int? totalProductActive;
@@ -65,6 +66,7 @@ class DashboardData {
   DashboardData(
       {this.totalOrder,
       this.lockOrder,
+      this.unLockRequest,
       this.totalCategory,
       this.totalProduct,
       this.totalProductActive,
@@ -78,6 +80,7 @@ class DashboardData {
   DashboardData.fromJson(Map<String, dynamic> json) {
     totalOrder = json['TotalOrder'];
     lockOrder = json['LockOrder'];
+    unLockRequest = json['UnLockRequest'];
     totalCategory = json['TotalCategory'];
     totalProduct = json['TotalProduct'];
     totalProductActive = json['TotalProductActive'];
@@ -93,6 +96,7 @@ class DashboardData {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['TotalOrder'] = totalOrder;
     data['LockOrder'] = lockOrder;
+    data['UnLockRequest'] = unLockRequest;
     data['TotalCategory'] = totalCategory;
     data['TotalProduct'] = totalProduct;
     data['TotalProductActive'] = totalProductActive;

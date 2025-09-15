@@ -45,8 +45,8 @@ Future<Map<String, dynamic>?> webServiceClientAPI(
   mapExtra['DeviceVersion'] = "1.0";
   if (addDeviceinfo) {
     if (Platform.isWindows) {
-      mapExtra['DeviceID'] = Platform.localHostname as Object;
-      mapExtra['DeviceName'] = Platform.operatingSystem as Object;
+      mapExtra['DeviceID'] = '0';
+      mapExtra['DeviceName'] = '${Platform.localHostname} ${Platform.operatingSystem}';
     }
   }
   map?.addAll(mapExtra);
@@ -55,7 +55,7 @@ Future<Map<String, dynamic>?> webServiceClientAPI(
     if (kDebugMode) {
       // print(myUri);
       // print(header);
-      // print(map);
+       print(map);
     }
     if (methodType == HTTP_POST) {
       response = await http.post(

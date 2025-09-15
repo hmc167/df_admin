@@ -38,5 +38,32 @@ class ApiList {
   
   static const String searchCustomer = "api/Customer/search";
 
+  static const String getUnLockRequests = "api/Order/all-unlock-request";
+  static const String changeUnLockRequestStatus = "api/Order/unlock-request-change-status";
+
+  static const String getOrders = "api/Order/all";
+  static const String getOrderDetails = "api/Order/get";
+  static const String changeOrderStatus = "api/Order/change-status";
+  static const String orderCreate = "api/Order/create";
+  static const String orderAddItem = "api/Order/add-item";
+  static const String orderUpdateItem = "api/Order/modify-item";
+  static const String orderRemoveItem = "api/Order/remove-item";
+
+  static const String orderAutoLock = "api/Order/auto-lock";
+  
+
+
+  static const String getHomeSliders = "api/HomeSlider/all";
+  static const String saveHomeSlider = "api/HomeSlider/insertupdate";
+  static const String changeHomeSliderStatus = "api/HomeSlider/change-status";
+  static const String getAdvertisements = "api/Advertisement/all";
+  static const String saveAdvertisement = "api/Advertisement/insertupdate";
+  static const String changeAdvertisementStatus = "api/Advertisement/change-status";
+  static const String getExpenseCategory = "api/ExpenseCategory/all";
+  static const String saveExpenseCategory = "api/ExpenseCategory/insertupdate";
+  static const String changeExpenseCategoryStatus = "api/ExpenseCategory/change-status";
+  static const String getExpenses = "api/Expense/all";
+  static const String saveExpense = "api/Expense/insertupdate";
+  static const String changeExpenseStatus = "api/Expense/change-status";
   // ... List all API endpoints here
 }
