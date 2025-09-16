@@ -23,6 +23,7 @@ class ApiList {
   static const String changeProductStatus = "api/ProductMaster/change-status";
   static const String saveProductVariant = "api/ProductMaster/variant-insertupdate";
   static const String getVariants = "api/ProductMaster/all-variant";
+  static const String getProductSearch = "api/ProductMaster/list";
 
   
   static const String getProductSuggests = "api/ProductMaster/suggests-all";
@@ -51,8 +52,9 @@ class ApiList {
 
   static const String orderAutoLock = "api/Order/auto-lock";
   
-
-
+  static const String rptOrderEstimate = "api/Report/order-estimate";
+  
+  
   static const String getHomeSliders = "api/HomeSlider/all";
   static const String saveHomeSlider = "api/HomeSlider/insertupdate";
   static const String changeHomeSliderStatus = "api/HomeSlider/change-status";

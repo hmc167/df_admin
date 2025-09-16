@@ -170,4 +170,13 @@ class ApiServiceCustomerMaster {
     var model = ClusterMasterModel.fromJson(response!);
     return model;
   }
+
+  static Future<CustomerInfoModel> search(String searchString) async {
+    final response = await webServiceClientAPI(HTTP_POST, ApiList.searchCustomer, {
+        "Filter": {"SearchText": searchString},
+      });
+    var model = CustomerInfoModel.fromJson(response!);
+    return model;
+  }
+
 }

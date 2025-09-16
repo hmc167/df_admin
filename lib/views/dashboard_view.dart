@@ -166,7 +166,8 @@ class _DashboardViewState extends State<DashboardView> {
                                   loginController.selectMenu(
                                     'Orders',
                                   );
-                                  Get.offAllNamed(Routes.ORDERS);
+                                  Get.offAllNamed(Routes.ORDERS,
+                                      arguments: {'islocked': true});
                                 },
                                 child: Column(
                                   children: [
@@ -193,7 +194,7 @@ class _DashboardViewState extends State<DashboardView> {
                                 child: Column(
                                   children: [
                                     Text(
-                                      controller.dashboardData.value.lockOrder
+                                      controller.dashboardData.value.unLockRequest
                                               ?.toString() ??
                                           '0',
                                       style: TextStyle(

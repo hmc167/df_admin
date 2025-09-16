@@ -29,7 +29,12 @@ class _LoginViewState extends State<LoginView> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Center(child: Image.asset("assets/images/DhanfuliyaFresh.png", width: 200)),
+              Center(
+                child: Image.asset(
+                  "assets/images/DhanfuliyaFresh.png",
+                  width: 350,
+                ),
+              ),
               SizedBox(height: 20),
               TextField(
                 focusNode: controller.usernameFocusNode,
@@ -40,6 +45,7 @@ class _LoginViewState extends State<LoginView> {
                   labelText: 'Mobile Number',
                   counterText: '', // hides the counter
                 ),
+                style: TextStyle(fontSize: 20),
                 inputFormatters: [
                   // Only allow digits and limit to 10
                   FilteringTextInputFormatter.digitsOnly,
@@ -74,6 +80,7 @@ class _LoginViewState extends State<LoginView> {
                       onPressed: controller.togglePasswordVisibility,
                     ),
                   ),
+                  style: TextStyle(fontSize: 20),
                   inputFormatters: [LengthLimitingTextInputFormatter(50)],
                   onSubmitted: (value) {
                     if (controller.usernameController.text.isEmpty) {

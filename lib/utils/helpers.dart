@@ -1,5 +1,8 @@
+import 'package:admin/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+
+import '../widgets/common_button.dart';
 
 class Helpers {
   static Future<T?> showPopup<T>(
@@ -30,5 +33,46 @@ class Helpers {
         return alert;
       },
     );
+  }
+
+  static Future<bool> showConfirmationDialog({
+    required String title,
+    required String message,
+    String confirmText = "Confirm",
+    String cancelText = "Cancel",
+  }) async {
+    return await Get.defaultDialog(
+          title: title,
+          middleText: message,
+          backgroundColor: AppColors.textColorWhite,
+          titleStyle: TextStyle(
+            color: AppColors.primaryColor,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+          middleTextStyle: TextStyle(color: AppColors.textColor, fontSize: 20),
+          contentPadding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+          titlePadding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+          radius: 4,
+          confirm: CommonButton(
+            width: 100,
+            text: confirmText,
+            onTap: () async {
+              {
+                Get.back(result: true);
+              }
+            },
+          ),
+          cancel: CommonButton(
+            width: 100,
+            text: cancelText,
+            color: AppColors.textColorWhite,
+            textColor: AppColors.primaryColor,
+            onTap: () {
+              Get.back(result: false);
+            },
+          ),
+        ) ??
+        false;
   }
 }

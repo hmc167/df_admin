@@ -3,6 +3,7 @@ import 'dart:io';
 import '../data/api_list.dart';
 import '../models/common.dart';
 import '../models/product_master.dart';
+import '../models/product_search.dart';
 import '../models/product_suggests.dart';
 import '../models/product_variants.dart';
 import '../utils/constants.dart';
@@ -149,4 +150,25 @@ class ApiServiceProductMaster {
     var model = FileUploadResponse.fromJson(response!);
     return model;
   }
+
+  static Future<ProductSearchModel> allSearch(
+    int categoryId, {
+    String searchString = '',
+    int clusterId = 0
+  }) async {
+    final response = await webServiceClientAPI(
+      HTTP_POST,
+      ApiList.getProductSearch,
+      {
+        "Filter": {
+          "ClusterId": clusterId,
+          "CategoryId": categoryId,
+          "SearchString": searchString
+        },
+      },
+    );
+    var model = ProductSearchModel.fromJson(response!);
+    return model;
+  }
+
 }

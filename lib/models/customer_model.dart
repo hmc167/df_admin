@@ -151,3 +151,103 @@ class CustomerMaster {
     return data;
   }
 }
+
+class CustomerInfoModel {
+  CustomerInfoData? data;
+  Message? message;
+  List<Message>? errors;
+  String? status;
+  bool? hasError;
+  bool? hasInfo;
+
+  CustomerInfoModel(
+      {this.data,
+      this.message,
+      this.errors,
+      this.status,
+      this.hasError,
+      this.hasInfo});
+
+  CustomerInfoModel.fromJson(Map<String, dynamic> json) {
+    data = json['Data'] != null ? CustomerInfoData.fromJson(json['Data']) : null;
+    message =
+        json['Message'] != null ? Message.fromJson(json['Message']) : null;
+    if (json['Errors'] != null) {
+      errors = <Message>[];
+      json['Errors'].forEach((v) {
+        errors!.add(Message.fromJson(v));
+      });
+    }
+    status = json['Status'];
+    hasError = json['HasError'];
+    hasInfo = json['HasInfo'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (this.data != null) {
+      data['Data'] = this.data!.toJson();
+    }
+    if (message != null) {
+      data['Message'] = message!.toJson();
+    }
+    if (errors != null) {
+      data['Errors'] = errors!.map((v) => v.toJson()).toList();
+    }
+    data['Status'] = status;
+    data['HasError'] = hasError;
+    data['HasInfo'] = hasInfo;
+    return data;
+  }
+}
+
+class CustomerInfoData {
+  List<CustomerInfo>? records;
+  int? totalRecords;
+
+  CustomerInfoData({this.records, this.totalRecords});
+
+  CustomerInfoData.fromJson(Map<String, dynamic> json) {
+    if (json['Records'] != null) {
+      records = <CustomerInfo>[];
+      json['Records'].forEach((v) {
+        records!.add(CustomerInfo.fromJson(v));
+      });
+    }
+    totalRecords = json['TotalRecords'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (records != null) {
+      data['Records'] = records!.map((v) => v.toJson()).toList();
+    }
+    data['TotalRecords'] = totalRecords;
+    return data;
+  }
+}
+
+class CustomerInfo {
+  int? id;
+  String? name;
+  double? balance;
+
+  CustomerInfo(
+      {this.id,
+      this.name,
+      this.balance});
+
+  CustomerInfo.fromJson(Map<String, dynamic> json) {
+    id = json['Id'];
+    name = json['CustomerInfo'];
+    balance = (json["Balance"] as num?)?.toDouble();
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['Id'] = id;
+    data['CustomerInfo'] = name;
+    data['Balance'] = balance;
+    return data;
+  }
+}

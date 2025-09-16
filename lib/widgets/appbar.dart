@@ -22,15 +22,15 @@ AppBar getAppBar() {
         SizedBox(width: 20),
         Row(
           children: [
-            InkWell(
-              onTap: () {
-                //
-              },
-              child: Badge.count(
-                count: 20,
-                child: Icon(Icons.notifications, color: Colors.white),
-              ),
-            ),
+            // InkWell(
+            //   onTap: () {
+            //     //
+            //   },
+            //   child: Badge.count(
+            //     count: 20,
+            //     child: Icon(Icons.notifications, color: Colors.white),
+            //   ),
+            // ),
             SizedBox(width: 20),
             PopupMenuButton<String>(
               onSelected: (value) {
@@ -536,7 +536,7 @@ Widget getAppDrawer() {
               ),
               onTap: () {
                 loginController.selectMenu('Reports-DailyOrderProduct');
-                Get.offAllNamed(Routes.DAILYORDERS);
+                Get.offAllNamed(Routes.REPORTDAILYORDERPRODUCT);
               },
               selected:
                   loginController.selectedMenu.value ==
