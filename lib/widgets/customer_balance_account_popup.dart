@@ -26,6 +26,7 @@ class _CustomerBalanceAccountPopupState
     extends State<CustomerBalanceAccountPopup> {
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _remarksController = TextEditingController();
+  int _paymentMode = 0; // 0: Cash, 1: Online, 3 : Other
 
   @override
   void dispose() {
@@ -106,6 +107,44 @@ class _CustomerBalanceAccountPopupState
                         controller: _remarksController,
                       ),
                       SizedBox(height: 10),
+                      DropdownButtonFormField<int>(
+                        decoration: InputDecoration(
+                          labelText: 'Payment Mode',
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                        ),
+                        initialValue: _paymentMode,
+                        items: [
+                          DropdownMenuItem(
+                            value: null,
+                            enabled: false,
+                            child: Text('Select Payment Mode'),
+                          ),
+                          DropdownMenuItem(
+                            value: 0,
+                            child: Text('Cash'),
+                          ),
+                          DropdownMenuItem(
+                            value: 1,
+                            child: Text('Online'),
+                          ),
+                          DropdownMenuItem(
+                            value: 3,
+                            child: Text('Other'),
+                          ),
+                        ],
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() {
+                              _paymentMode = value;
+                            });
+                          }
+                        },
+                      ),
+                      SizedBox(height: 10),
                       CommonButton(
                         text: "Add Balance",
                         color: AppColors.primaryColor,
@@ -120,6 +159,7 @@ class _CustomerBalanceAccountPopupState
                               widget.customerMaster,
                               amount,
                               remarks,
+                              _paymentMode,
                             );
                             if (result) {
                               widget.customerMaster.balance =
@@ -162,7 +202,7 @@ class _CustomerBalanceAccountPopupState
                                       widget.controller.balanceHistory[index];
                                   return ListTile(
                                     title: Text(history.remarks ?? ''),
-                                    subtitle: Text('${history.createdDate}'),
+                                    subtitle: Text('${history.createdDate} | ${widget.controller.getPaymentModeText(history.paymentMode)}'),
                                     leading: Icon(
                                       history.transactionType == 1
                                           ? Icons.arrow_downward

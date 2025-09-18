@@ -68,6 +68,7 @@ class ApiServiceProductMaster {
         "MinOrderQty": product.minOrderQty,
         "SortOrder": product.sortOrder,
         "IsActive": product.isActive,
+        "TaxIds": product.taxIds??'',
         "ClusterMappings": product.productClusterMappings
             ?.map((c) => c.toJson())
             .toList(),
@@ -111,7 +112,6 @@ class ApiServiceProductMaster {
       ApiList.changeProductSuggestsStatus,
       {'ID': iD, 'Action': action, 'Status': status},
     );
-    print(response);
     var model = ChangeStatusResponse.fromJson(response!);
     return model;
   }

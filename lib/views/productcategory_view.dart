@@ -143,6 +143,14 @@ class _ProductCategoryViewState extends State<ProductCategoryView> {
                     ),
                   ),
                   SizedBox(
+                    width: 80,
+                    child: Text(
+                      'Upcoming',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  SizedBox(
                     width: 90,
                     child: Text(
                       'Sort Order',
@@ -206,16 +214,28 @@ class _ProductCategoryViewState extends State<ProductCategoryView> {
                                           category.parentCategoryMasterId == 0
                                       ? '--'
                                       : controller.parentCategories
-                                                .firstWhere(
+                                                .where(
                                                   (c) =>
                                                       c.iD ==
                                                       category
                                                           .parentCategoryMasterId,
-                                                )
-                                                .name ??
+                                                ).firstOrNull?.name ??
                                             '',
                                   textAlign: TextAlign.left,
                                 ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 80,
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: category.upcoming == true
+                                    ? Icon(
+                                        Icons.check_circle_outline,
+                                        color: AppColors.warningColor,
+                                        size: 20,
+                                      )
+                                    : SizedBox.shrink(),
                               ),
                             ),
                             SizedBox(
@@ -225,6 +245,8 @@ class _ProductCategoryViewState extends State<ProductCategoryView> {
                                 textAlign: TextAlign.center,
                               ),
                             ),
+
+                            
                             MouseRegion(
                               cursor: SystemMouseCursors.click,
                               child: GestureDetector(
@@ -290,6 +312,27 @@ class _ProductCategoryViewState extends State<ProductCategoryView> {
                         ),
                       );
                     }),
+                    if (controller.categories.isEmpty)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 5,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.textColorWhite,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'No records found',
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                      ),
+                  
                   ],
                 ),
               ),

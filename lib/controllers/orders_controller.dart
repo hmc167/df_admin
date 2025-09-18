@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../models/category_master.dart';
 import '../models/cluster_master.dart';
 import '../models/customer_model.dart';
+import '../models/delivery_slots.dart';
 import '../models/order.dart';
 import '../models/product_search.dart';
 import '../services/api_service_category_master.dart';
@@ -40,6 +41,7 @@ class OrdersController extends GetxController {
   RxList<CustomerInfo> customers = <CustomerInfo>[].obs;
   RxList<Product> products = <Product>[].obs;
   RxList<Order> orders = <Order>[].obs;
+  RxList<DeliverySlots> deliverySlots = <DeliverySlots>[].obs;
   Rxn<OrderDetailData> selectedOrder = Rxn<OrderDetailData>();
   
   final RxInt selectedProduct = 0.obs;
@@ -98,6 +100,9 @@ class OrdersController extends GetxController {
         return;
       }
     }
+    else{
+      
+    }
     selectedOrder.value = orderDetails.data;
     await Helpers.showPopup(OrderDetailsPopup(controller: this), width: 900);
     await getOrders();
@@ -126,6 +131,7 @@ class OrdersController extends GetxController {
     var result = await ApiServiceCustomerMaster.allClusterMasters();
     if (result.hasError == false) {
       clusters.value = result.data?.records ?? [];
+      filterClusterId.value = clusters.firstOrNull?.iD ?? 1;      
     } else {
       clusters.value = [];
       Get.snackbar(
@@ -302,7 +308,7 @@ class OrdersController extends GetxController {
     } else {
       Get.snackbar(
         'Error',
-        result.errors?.firstOrNull?.message ?? 'Error creating order',
+        result.message?.message ?? result.errors?.firstOrNull?.message ?? 'Error creating order',
         backgroundColor: Colors.redAccent,
         colorText: Colors.white,
         snackPosition: SnackPosition.BOTTOM,
@@ -385,6 +391,41 @@ class OrdersController extends GetxController {
       );
     }
   }
+  
+  Future<bool> modifyItem(int orderID, int itemID, int qty) async {
+    var result = await ApiServiceOrder.modifyItem(
+      orderID,
+      itemID,
+      qty,
+    );
+    if(result.hasError == false){
+        var orderDetails = await ApiServiceOrder.getOrderDetails(selectedOrder.value?.id ?? 0);
+        if (orderDetails.hasError == true) {
+          Get.snackbar(
+            'Error',
+            orderDetails.errors?.firstOrNull?.message ??
+                'Error loading order details',
+            backgroundColor: Colors.redAccent,
+            colorText: Colors.white,
+            snackPosition: SnackPosition.BOTTOM,
+            margin: EdgeInsets.all(10),
+          );
+          return false;
+        }
+        selectedOrder.value = orderDetails.data;
+        return true;
+      } else {
+        Get.snackbar(
+          'Error',
+          result.errors?.firstOrNull?.message ?? 'Error modifying item in order',
+          backgroundColor: Colors.redAccent,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+          margin: EdgeInsets.all(10),
+        );
+        return false;
+      }
+  }
 
   Future<void> orderStatusHistory() async {
     await Helpers.showPopup(OrderStatusHistoryPopup(controller: this), width: 600);
@@ -457,5 +498,6 @@ class OrdersController extends GetxController {
       );
     }
   }
+
   
 }

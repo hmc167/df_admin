@@ -116,11 +116,12 @@ class ApiServiceCustomerMaster {
     int custID,
     double amount,
     String remarks,
+    int paymentMode,
   ) async {
     final response = await webServiceClientAPI(
       HTTP_POST,
       ApiList.addCustomerBalance,
-      {'ID': custID, 'Balance': amount, 'Remark': remarks},
+      {'ID': custID, 'Balance': amount, 'Remark': remarks, 'PaymentMode': paymentMode},
     );
     var model = SaveMasterResponse.fromJson(response!);
     return model;

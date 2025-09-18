@@ -154,6 +154,7 @@ class ProductMaster {
   int? unitCategoryMasterId;
   String? outOfStockMessage;
   int? minOrderQty;
+  String? taxIds;
   List<ClusterMappings>? productClusterMappings;
   List<ProductImages>? productImages;
 
@@ -178,6 +179,7 @@ class ProductMaster {
     this.unitCategoryMasterId,
     this.outOfStockMessage,
     this.minOrderQty,
+    this.taxIds,
     this.productClusterMappings,
     this.productImages,
   });
@@ -204,6 +206,7 @@ class ProductMaster {
     isOutOfStock = json['IsOutOfStock'];
     outOfStockMessage = json['OutOfStockMessage'];
     minOrderQty = json['MinOrderQty'];
+    taxIds = json['TaxIds'];
     if (json['ProductClusterMappings'] != null) {
       productClusterMappings = <ClusterMappings>[];
       json['ProductClusterMappings'].forEach((v) {
@@ -241,6 +244,7 @@ class ProductMaster {
     data['IsOutOfStock'] = isOutOfStock;
     data['OutOfStockMessage'] = outOfStockMessage;
     data['MinOrderQty'] = minOrderQty;
+    data['TaxIds'] = taxIds;
     if (productClusterMappings != null) {
       data['ProductClusterMappings'] = productClusterMappings!
           .map((v) => v.toJson())

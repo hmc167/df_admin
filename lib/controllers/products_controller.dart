@@ -1011,9 +1011,9 @@ class ProductsController extends GetxController {
           ),
         ];
         pCats.addAll(
-          dbCategories
-              .where((c) => (c.parentCategoryMasterId ?? 0) != 0)
-              .toList(),
+          dbCategories.toList()
+              // .where((c) => (c.parentCategoryMasterId ?? 0) != 0)
+              // .toList(),
         );
         productCategories.value = pCats;
       }

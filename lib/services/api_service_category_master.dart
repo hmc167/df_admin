@@ -28,6 +28,7 @@ class ApiServiceCategoryMaster {
           'Image': category.image,
           'SortOrder': category.sortOrder,
           'IsActive': category.isActive,
+          'Upcoming': category.upcoming,
           'ParentCategoryMasterId': category.parentCategoryMasterId,
         });
     var model = SaveMasterResponse.fromJson(response!);

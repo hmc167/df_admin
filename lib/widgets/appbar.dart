@@ -146,19 +146,19 @@ Widget getAppDrawer() {
               selected: loginController.selectedMenu.value == 'Products',
               selectedTileColor: Colors.blueGrey[100],
             ),
-            ListTile(
-              title: Text(
-                'Out Of Stock Manage',
-                style: TextStyle(color: Colors.black),
-              ),
-              onTap: () {
-                loginController.selectMenu('Products-OutOfStock');
-                Get.offAllNamed(Routes.OUTOFSTOCK);
-              },
-              selected:
-                  loginController.selectedMenu.value == 'Products-OutOfStock',
-              selectedTileColor: Colors.blueGrey[100],
-            ),
+            // ListTile(
+            //   title: Text(
+            //     'Out Of Stock Manage',
+            //     style: TextStyle(color: Colors.black),
+            //   ),
+            //   onTap: () {
+            //     loginController.selectMenu('Products-OutOfStock');
+            //     Get.offAllNamed(Routes.OUTOFSTOCK);
+            //   },
+            //   selected:
+            //       loginController.selectedMenu.value == 'Products-OutOfStock',
+            //   selectedTileColor: Colors.blueGrey[100],
+            // ),
             ListTile(
               title: Text('New Arrival', style: TextStyle(color: Colors.black)),
               onTap: () {

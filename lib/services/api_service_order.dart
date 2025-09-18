@@ -118,6 +118,7 @@ class ApiServiceOrder {
     int? active,
     int? orderStatus,
     int? paymentStatus,
+    int? deliverySlotId,
     String searchString = '',
     bool? isLocked,
     int pNo = 1,
@@ -140,7 +141,8 @@ class ApiServiceOrder {
           "OrderStatus": orderStatus,
           "PaymentStatus": paymentStatus,
           "SearchString": searchString,
-          "IsLocked": isLocked
+          "IsLocked": isLocked,
+          "DeliverySlotId": deliverySlotId,
         }
       },
     );

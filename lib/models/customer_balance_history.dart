@@ -80,6 +80,7 @@ class BalanceHistory {
   double? transactionBalance;
   double? newBalance;
   int? transactionType;
+  int? paymentMode;
   String? createdDate;
   String? remarks;
   int? totalRecords;
@@ -89,6 +90,7 @@ class BalanceHistory {
       this.transactionBalance,
       this.newBalance,
       this.transactionType,
+      this.paymentMode,
       this.createdDate,
       this.remarks,
       this.totalRecords});
@@ -98,6 +100,7 @@ class BalanceHistory {
     transactionBalance = (json["TransactionBalance"] as num?)?.toDouble();
     newBalance = (json["NewBalance"] as num?)?.toDouble();
     transactionType = json['TransactionType'];
+    paymentMode = json['PaymentMode'];
     createdDate = json['CreatedDate'];
     remarks = json['Remarks'];
     totalRecords = json['TotalRecords'];
@@ -109,6 +112,7 @@ class BalanceHistory {
     data['TransactionBalance'] = transactionBalance;
     data['NewBalance'] = newBalance;
     data['TransactionType'] = transactionType;
+    data['PaymentMode'] = paymentMode;
     data['CreatedDate'] = createdDate;
     data['Remarks'] = remarks;
     data['TotalRecords'] = totalRecords;

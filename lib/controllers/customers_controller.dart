@@ -199,11 +199,13 @@ class CustomersController extends GetxController {
     CustomerMaster customer,
     double amount,
     String remarks,
+    int paymentMode,
   ) async {
     var result = await ApiServiceCustomerMaster.addBalance(
       customer.id ?? 0,
       amount,
       remarks,
+      paymentMode
     );
     if (result.hasError == false) {
       Get.snackbar(
@@ -294,6 +296,21 @@ class CustomersController extends GetxController {
         snackPosition: SnackPosition.BOTTOM,
         margin: EdgeInsets.all(10),
       );
+    }
+  }
+
+  getPaymentModeText(int? paymentMode) {
+    switch (paymentMode) {
+      case 0:
+        return 'Cash';
+      case 1:
+        return 'Online';
+      case 2:
+        return 'Wallet';
+      case 3:
+        return 'Other';
+      default:
+        return 'Unknown';
     }
   }
 

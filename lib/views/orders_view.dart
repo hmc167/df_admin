@@ -290,6 +290,14 @@ class _OrdersViewState extends State<OrdersView> {
                     ),
                   ),
                   SizedBox(
+                    width: 300,
+                    child: Text(
+                      'Delivery Slot',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  SizedBox(
                     width: 200,
                     child: Text(
                       'Invoice Number',
@@ -381,6 +389,13 @@ class _OrdersViewState extends State<OrdersView> {
                               ),
                             ),
                             SizedBox(
+                              width: 300,
+                              child: Text(
+                                order.deliverySlot ?? '',
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
+                            SizedBox(
                               width: 200,
                               child: Text(
                                 order.invoiceNumber ?? '',
@@ -447,7 +462,7 @@ class _OrdersViewState extends State<OrdersView> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  if(!((order.orderStatus??0) > 3))
+                                  if(!(((order.orderStatus??0) > 3) || (order.isLock == false)))
                                   InkWell(
                                     onTap: () async {
                                         await controller.changeStatus(

@@ -80,7 +80,7 @@ class UnitVariant {
   String? name;
   int? sortOrder;
   double? multiplier;
-  double? increment;
+  double? unitValue;
   int? unitCategoryMasterId;
   String? unitCategoryName;
   String? createdBy;
@@ -92,7 +92,7 @@ class UnitVariant {
       this.name,
       this.sortOrder,
       this.multiplier,
-      this.increment,
+      this.unitValue,
       this.unitCategoryMasterId,
       this.unitCategoryName,
       this.createdBy,
@@ -104,7 +104,7 @@ class UnitVariant {
     name = json['Name'];
     sortOrder = json['SortOrder'];
     multiplier = json['Multiplier'];
-    increment = json['Increment'];
+    unitValue = json['UnitValue'];
     unitCategoryMasterId = json['UnitCategoryMasterId'];
     unitCategoryName = json['UnitCategoryName'];
     createdBy = json['CreatedBy'];
@@ -118,7 +118,7 @@ class UnitVariant {
     data['Name'] = name;
     data['SortOrder'] = sortOrder;
     data['Multiplier'] = multiplier;
-    data['Increment'] = increment;
+    data['UnitValue'] = unitValue;
     data['UnitCategoryMasterId'] = unitCategoryMasterId;
     data['UnitCategoryName'] = unitCategoryName;
     data['CreatedBy'] = createdBy;

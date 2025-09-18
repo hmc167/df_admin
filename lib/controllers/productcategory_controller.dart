@@ -22,16 +22,15 @@ class ProductCategoryController extends GetxController {
   final descriptionController = TextEditingController();
   final sortOrderController = TextEditingController();
   final status = false.obs;
+  final upcoming = false.obs;
   final parentCategoryId = 0.obs;
   final image = "".obs;
 
   final nameFocusNode = FocusNode();
   final parentCategoryFocusNode = FocusNode();
   final sortOrderFocusNode = FocusNode();
-  final statusFocusNode = FocusNode();
 
   final isLoading = false.obs;
-
   final errorMessage = ''.obs;
 
   RxList<CategoryMaster> categories = <CategoryMaster>[].obs;
@@ -46,19 +45,16 @@ class ProductCategoryController extends GetxController {
     });
   }
 
-  void toggleStatus() {
-    status.value = !status.value;
-  }
-
   void clearFields() {
-  nameController.clear();
-  descriptionController.clear();
-  sortOrderController.clear();
-  status.value = false;
-  parentCategoryId.value = 0;
-  nameFocusNode.requestFocus();
-  image.value = "";
-  pickedImageFile.value = null;
+    nameController.clear();
+    descriptionController.clear();
+    sortOrderController.clear();
+    status.value = false;
+    upcoming.value = false;
+    parentCategoryId.value = 0;
+    nameFocusNode.requestFocus();
+    image.value = "";
+    pickedImageFile.value = null;
   }
 
   Future<void> openAddCategoryPopup(CategoryMaster category) async {
@@ -67,6 +63,7 @@ class ProductCategoryController extends GetxController {
   descriptionController.text = category.desc ?? '';
   sortOrderController.text = category.sortOrder?.toString() ?? '';
   status.value = category.isActive ?? false;
+  upcoming.value = category.upcoming ?? false;
   parentCategoryId.value = category.parentCategoryMasterId ?? 0;
   image.value = category.image ?? '';
   pickedImageFile.value = null;
@@ -248,6 +245,28 @@ class ProductCategoryController extends GetxController {
                           ],
                         ),
                       ),
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Text(
+                              'Upcoming',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: AppColors.textColor,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Obx(
+                              () => CupertinoSwitch(
+                                value: upcoming.value,
+                                onChanged: (value) {
+                                  upcoming.value = value;
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ],
@@ -320,6 +339,7 @@ class ProductCategoryController extends GetxController {
       parentCategoryMasterId: parentCategoryId.value,
       sortOrder: int.tryParse(sortOrderController.text) ?? 0,
       isActive: status.value,
+      upcoming: upcoming.value,
       image: image.value,
     );
 
@@ -375,6 +395,16 @@ class ProductCategoryController extends GetxController {
                 margin: EdgeInsets.all(10),
               );
               await getCategories();
+            }
+            else {
+              Get.snackbar(
+                'Error',
+                result.message?.message ?? 'Error deleting category',
+                backgroundColor: Colors.redAccent,
+                colorText: Colors.white,
+                snackPosition: SnackPosition.BOTTOM,
+                margin: EdgeInsets.all(10),
+              );
             }
           },
         ),

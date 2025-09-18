@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../controllers/orders_controller.dart';
@@ -16,6 +17,7 @@ class OrderDetailsPopup extends StatefulWidget {
 }
 
 class _OrderDetailsPopupState extends State<OrderDetailsPopup> {
+  final TextEditingController qtyController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -188,11 +190,11 @@ class _OrderDetailsPopupState extends State<OrderDetailsPopup> {
                 SizedBox(
                   width: 250,
                   child: Text(
-                    '💸 Amount: ${order?.totalAmount?.toStringAsFixed(2) ?? '0.00'}',
+                    '💸 Amount: ${order?.totalAmount?.toStringAsFixed(2) ?? '0.00'}${order?.paymentStatus == 2 ?' (Paid :${order?.paidAmount?.toStringAsFixed(2) ?? ''})':''}',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.primaryColor,
+                      color: order?.paymentStatus == 1 ? AppColors.successColor : order?.paymentStatus == 2 ? AppColors.warningColor : AppColors.errorColor,
                     ),
                     textAlign: TextAlign.right,
                   ),
@@ -261,13 +263,142 @@ class _OrderDetailsPopupState extends State<OrderDetailsPopup> {
                                           style: TextStyle(fontSize: 16),
                                         ),
                                       ),
-                                      SizedBox(
-                                        width: 100,
-                                        child: Text(
-                                          'Qty: ${item?.qty ?? 0}',
-                                          style: TextStyle(fontSize: 16),
+                                      if (order?.isLock == true)
+                                        SizedBox(
+                                          width: 100,
+                                          child: Text(
+                                            'Qty: ${item?.qty ?? 0}',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
                                         ),
-                                      ),
+                                      if (order?.isLock == false)
+                                        InkWell(
+                                          onTap: () {
+                                            qtyController.text =
+                                                (item?.qty ?? 0).toString();
+                                            Get.defaultDialog(
+                                              backgroundColor:
+                                                  AppColors.textColorWhite,
+                                              titleStyle: TextStyle(
+                                                color: AppColors.primaryColor,
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              contentPadding:
+                                                  EdgeInsets.symmetric(
+                                                    horizontal: 20,
+                                                    vertical: 10,
+                                                  ),
+                                              titlePadding:
+                                                  EdgeInsets.symmetric(
+                                                    horizontal: 20,
+                                                    vertical: 10,
+                                                  ),
+                                              radius: 8,
+                                              title: 'Change Qty for ${item?.name ?? ''}',
+                                              content: Column(
+                                                children: [
+                                                  Text(
+                                                    'Are you sure you want to change the quantity of this item?',
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      color:
+                                                          AppColors.textColor,
+                                                      fontSize: 18,
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 20),
+                                                  SizedBox(
+                                                    width: 200,
+                                                    child: TextField(
+                                                      controller: qtyController,
+                                                      maxLines: 1,
+                                                      decoration: InputDecoration(
+                                                        
+                                                        labelText: "Quantity",
+                                                        hintText:
+                                                            "Enter the new quantity",
+                                                        border: OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                8,
+                                                              ),
+                                                        ),
+                                                        counterText: ''
+                                                      ),
+                                                      maxLength: 2,
+                                                      keyboardType:
+                                                          TextInputType.number,
+                                                      inputFormatters: [
+                                                        FilteringTextInputFormatter
+                                                            .digitsOnly,
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 20),
+                                                ],
+                                              ),
+                                              confirm: CommonButton(
+                                                width: 100,
+                                                text: "Update",
+                                                onTap: () async {
+                                                  var newQty =
+                                                      int.tryParse(
+                                                        qtyController.text,
+                                                      ) ??
+                                                      0;
+                                                  if (newQty <= 0) {
+                                                    Get.snackbar(
+                                                      'Error',
+                                                      'Quantity must be greater than zero.',
+                                                      backgroundColor:
+                                                          Colors.redAccent,
+                                                      colorText: Colors.white,
+                                                      snackPosition:
+                                                          SnackPosition.BOTTOM,
+                                                      margin: EdgeInsets.all(
+                                                        10,
+                                                      ),
+                                                    );
+                                                    return;
+                                                  }
+                                                  if (newQty ==
+                                                      (item?.qty ?? 0)) {
+                                                    Get.back();
+                                                    return;
+                                                  }
+                                                  var res = await widget
+                                                      .controller
+                                                      .modifyItem(
+                                                        order?.id ?? 0,
+                                                        item?.id ?? 0,
+                                                        newQty,
+                                                      );
+                                                  if (res) {
+                                                    Get.back();
+                                                  }
+                                                },
+                                              ),
+                                              cancel: CommonButton(
+                                                width: 100,
+                                                text: "Cancel",
+                                                color: AppColors.textColorWhite,
+                                                textColor:
+                                                    AppColors.primaryColor,
+                                                onTap: () {
+                                                  Get.back();
+                                                },
+                                              ),
+                                            );
+                                          },
+                                          child: SizedBox(
+                                            width: 100,
+                                            child: Text(
+                                              'Qty: ${item?.qty ?? 0}',
+                                              style: TextStyle(fontSize: 16, color: AppColors.primaryColor, fontWeight: FontWeight.w500,),
+                                            ),
+                                          ),
+                                        ),
                                       Spacer(),
                                       SizedBox(
                                         child: Text(
@@ -281,19 +412,20 @@ class _OrderDetailsPopupState extends State<OrderDetailsPopup> {
                                 ],
                               ),
                             ),
-                            InkWell(
-                              onTap: () {
-                                widget.controller.removeItem(
-                                  order?.id ?? 0,
-                                  item?.id ?? 0,
-                                );
-                              },
-                              child: Icon(
-                                Icons.delete,
-                                color: Colors.red,
-                                size: 40,
+                            if (order?.isLock == false)
+                              InkWell(
+                                onTap: () {
+                                  widget.controller.removeItem(
+                                    order?.id ?? 0,
+                                    item?.id ?? 0,
+                                  );
+                                },
+                                child: Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                  size: 40,
+                                ),
                               ),
-                            ),
                           ],
                         ),
                       );
@@ -582,13 +714,14 @@ class _OrderDetailsPopupState extends State<OrderDetailsPopup> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 const SizedBox(width: 20),
-                CommonButton(
-                  text: "Add Item",
-                  icon: Icons.add,
-                  onTap: () async {
-                    await widget.controller.showAddItemDialog(context);
-                  },
-                ),
+                if ((order?.customerId ?? 0) > 0 && order?.isLock == false)
+                  CommonButton(
+                    text: "Add Item",
+                    icon: Icons.add,
+                    onTap: () async {
+                      await widget.controller.showAddItemDialog(context);
+                    },
+                  ),
                 Spacer(),
                 CommonButton(
                   text: "Close",

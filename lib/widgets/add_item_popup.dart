@@ -124,7 +124,7 @@ class _AddItemPopupState extends State<AddItemPopup> {
                                   vertical: 10,
                                 ),
                                 radius: 8,
-                                title: 'Select Variant & Quantity',
+                                title: 'Select Variant & Quantity For ${product.name ?? ''}',
                                 content: StatefulBuilder(
                                   builder: (context, setStateDialog) {
                                     return Column(

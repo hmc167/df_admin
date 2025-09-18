@@ -86,6 +86,7 @@ class CategoryMaster {
   String? image;
   int? parentCategoryMasterId;
   bool? isActive;
+  bool? upcoming;
   int? sortOrder;
   String? createdBy;
   String? createdDate;
@@ -99,6 +100,7 @@ class CategoryMaster {
     this.image,
     this.parentCategoryMasterId,
     this.isActive,
+    this.upcoming,
     this.sortOrder,
     this.createdBy,
     this.createdDate,
@@ -113,6 +115,7 @@ class CategoryMaster {
     image = json['Image'];
     parentCategoryMasterId = json['ParentCategoryMasterId'];
     isActive = json['IsActive'];
+    upcoming = json['Upcoming'];
     sortOrder = json['SortOrder'];
     createdBy = json['CreatedBy'];
     createdDate = json['CreatedDate'];
@@ -128,6 +131,7 @@ class CategoryMaster {
     data['Image'] = image;
     data['ParentCategoryMasterId'] = parentCategoryMasterId;
     data['IsActive'] = isActive;
+    data['Upcoming'] = upcoming;
     data['SortOrder'] = sortOrder;
     data['CreatedBy'] = createdBy;
     data['CreatedDate'] = createdDate;

@@ -104,6 +104,8 @@ class Order {
   bool? isActive;
   String? createdDate;
   String? packingNumber;
+  int? deliverySlotId;
+  String? deliverySlot;
 
   Order(
       {this.id,
@@ -133,7 +135,9 @@ class Order {
       this.notes,
       this.isActive,
       this.createdDate,
-      this.packingNumber});
+      this.packingNumber,
+      this.deliverySlotId,
+      this.deliverySlot});
 
   Order.fromJson(Map<String, dynamic> json) {
     id = json['Id'];
@@ -164,6 +168,8 @@ class Order {
     isActive = json['IsActive'];
     createdDate = json['CreatedDate'];
     packingNumber = json['PackingNumber'];
+    deliverySlotId = json['DeliverySlotId'];
+    deliverySlot = json['DeliverySlot'];
   }
 
   Map<String, dynamic> toJson() {
@@ -196,6 +202,8 @@ class Order {
     data['IsActive'] = isActive;
     data['CreatedDate'] = createdDate;
     data['PackingNumber'] = packingNumber;
+    data['DeliverySlotId'] = deliverySlotId;
+    data['DeliverySlot'] = deliverySlot;
     return data;
   }
 }
@@ -284,6 +292,8 @@ class OrderDetailData {
   bool? isDelete;
   String? packingNumber;
   String? createdDate;
+  int? deliverySlotId;
+  String? deliverySlot;
   List<OrderDetails>? orderDetails;
   OrderAddress? orderAddress;
   List<OrderStatusHistory>? orderStatusHistory;
@@ -323,6 +333,8 @@ class OrderDetailData {
       this.isDelete,
       this.packingNumber,
       this.createdDate,
+      this.deliverySlotId,
+      this.deliverySlot,
       this.orderDetails,
       this.orderAddress,
       this.orderStatusHistory});
@@ -362,6 +374,8 @@ class OrderDetailData {
     isDelete = json['IsDelete'];
     packingNumber = json['PackingNumber'];
     createdDate = json['CreatedDate'];
+    deliverySlotId = json['DeliverySlotId'];
+    deliverySlot = json['DeliverySlot'];
     if (json['OrderDetails'] != null) {
       orderDetails = <OrderDetails>[];
       json['OrderDetails'].forEach((v) {
@@ -415,6 +429,8 @@ class OrderDetailData {
     data['IsDelete'] = isDelete;
     data['PackingNumber'] = packingNumber;
     data['CreatedDate'] = createdDate;
+    data['DeliverySlotId'] = deliverySlotId;
+    data['DeliverySlot'] = deliverySlot;
     if (orderDetails != null) {
       data['OrderDetails'] = orderDetails!.map((v) => v.toJson()).toList();
     }
