@@ -537,7 +537,7 @@ class OrderAddress {
   String? pinCode;
   double? latitude;
   double? longitude;
-  String? type;
+  int? type;
 
   OrderAddress(
       {this.id,
