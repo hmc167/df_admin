@@ -1,7 +1,7 @@
 class AppConstants {
   static const String appName = "Dhanfuliya Fresh Admin";
-  //static const String apiBaseUrl = "http://papi.dhanfuliyafresh.com/";
-  static const String apiBaseUrl = "https://localhost:7024/";
+  static const String apiBaseUrl = "https://papi.dhanfuliyafresh.com/";
+  //static const String apiBaseUrl = "https://localhost:7024/";
   //static const String apiBaseUrl = "http://localhost:5000/";
   // ... other constants
 }
