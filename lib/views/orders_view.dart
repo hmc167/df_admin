@@ -527,7 +527,8 @@ class _OrdersViewState extends State<OrdersView> {
             Container(
               padding: const EdgeInsets.all(8.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
+                spacing: 10,
                 children: [
                   Obx(
                     () => Text(
@@ -535,10 +536,39 @@ class _OrdersViewState extends State<OrdersView> {
                       style: TextStyle(fontSize: 16, color: Colors.grey),
                     ),
                   ),
+                  Spacer(),
+                  Obx(
+                    () => CommonButton(
+                      color: AppColors.secondaryColor,
+                      borderColor: AppColors.secondaryColor,
+                      width: 240,
+                      text: controller.isLockingOrder.value ? 'Sending...' : 'Lock Notification',
+                      icon: Icons.notifications_active,
+                      onTap: controller.isLockingOrder.value
+                          ? () {}
+                          : () async {
+                              await controller.sendLockNotification();
+                            },
+                    ),
+                  ),
+                  Obx(
+                    () => CommonButton(
+                      color: AppColors.warningColor,
+                      borderColor: AppColors.warningColor,
+                      width: 265,
+                      text: controller.isLockingOrder.value ? 'Canceling...' : 'Cancel Unlocked Orders',
+                      icon: Icons.notifications_active,
+                      onTap: controller.isLockingOrder.value
+                          ? () {}
+                          : () async {
+                              await controller.orderAutoCancel();
+                            },
+                    ),
+                  ),
                   Obx(
                     () => CommonButton(
                       width: 240,
-                      text: controller.isLockingOrder.value ? 'Locking...' : 'Lock All Orders',
+                      text: controller.isLockingOrder.value ? 'Locking...' : 'Lock Today Orders',
                       icon: Icons.lock,
                       onTap: controller.isLockingOrder.value
                           ? () {}

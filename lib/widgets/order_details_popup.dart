@@ -259,7 +259,7 @@ class _OrderDetailsPopupState extends State<OrderDetailsPopup> {
                                       SizedBox(
                                         width: 150,
                                         child: Text(
-                                          'Price: ${item?.price?.toStringAsFixed(2) ?? '0.00'}',
+                                          'Price: ${item?.totalAmount?.toStringAsFixed(2) ?? '0.00'}',
                                           style: TextStyle(fontSize: 16),
                                         ),
                                       ),

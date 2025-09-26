@@ -433,7 +433,7 @@ class OrdersController extends GetxController {
 
   Future<void> lockAllOrders() async {
     bool confirmed = await Helpers.showConfirmationDialog(
-      title: 'Lock All Orders',
+      title: 'Lock Orders',
       message: 'Are you sure you want to lock all orders?',
     );
     if (!confirmed) return;
@@ -499,5 +499,66 @@ class OrdersController extends GetxController {
     }
   }
 
+  Future<void> sendLockNotification() async {
+      bool confirmed = await Helpers.showConfirmationDialog(
+      title: 'Lock Notification',
+      message: 'Are you sure you want to send notifications for all orders?',
+    );
+    if (!confirmed) return;
+    isLockingOrder.value = true;
+    var result = await ApiServiceOrder.lockNotification(DateTime.now());
+    isLockingOrder.value = false;
+    if(result.hasError == false){
+      await getOrders();
+      Get.snackbar(
+        'Success',
+        'Notifications sent successfully',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+        margin: EdgeInsets.all(10),
+      );
+    } else {
+      Get.snackbar(
+        'Error',
+        result.errors?.firstOrNull?.message ?? 'Error sending notifications',
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+        margin: EdgeInsets.all(10),
+      );
+    }
+  }
+
+  Future<void> orderAutoCancel() async {
+    bool confirmed = await Helpers.showConfirmationDialog(
+      title: 'Auto Cancel Orders',
+      message: 'Are you sure you want to cancel all unlocked orders?',
+    );
+    if (!confirmed) return;
+    isLockingOrder.value = true;
+    var result = await ApiServiceOrder.orderAutoCancel(DateTime.now());
+    isLockingOrder.value = false;
+    if(result.hasError == false){
+      await getOrders();
+      Get.snackbar(
+        'Success',
+        'Unlock orders canceled successfully',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+        margin: EdgeInsets.all(10),
+      );
+    } else {
+      Get.snackbar(
+        'Error',
+        result.errors?.firstOrNull?.message ?? 'Error canceling orders',
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+        margin: EdgeInsets.all(10),
+      );
+    }
+  }
   
 }

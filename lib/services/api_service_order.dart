@@ -192,4 +192,24 @@ class ApiServiceOrder {
     return model;
   }
 
+  static Future<ChangeStatusResponse> lockNotification(
+    DateTime orderDate) async {
+    final response =
+        await webServiceClientAPI(HTTP_POST, ApiList.orderLockNotification, {
+            "OrderDate": orderDate.toIso8601String()
+        });
+    var model = ChangeStatusResponse.fromJson(response!);
+    return model;
+  }
+  
+  static Future<ChangeStatusResponse> orderAutoCancel(
+    DateTime orderDate) async {
+    final response =
+        await webServiceClientAPI(HTTP_POST, ApiList.orderAutoCancel, {
+            "OrderDate": orderDate.toIso8601String()
+        });
+    var model = ChangeStatusResponse.fromJson(response!);
+    return model;
+  }
+
 }

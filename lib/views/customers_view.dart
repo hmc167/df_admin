@@ -274,7 +274,9 @@ class _CustomersViewState extends State<CustomersView> {
                               cursor: SystemMouseCursors.click,
                               child: GestureDetector(
                                 onTap: () {
-                                  //
+                                  if(customer.isApproved == false){
+                                    controller.approveCustomer(customer);
+                                  }
                                 },
                                 child: SizedBox(
                                   width: 50,

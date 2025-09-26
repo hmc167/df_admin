@@ -314,4 +314,28 @@ class CustomersController extends GetxController {
     }
   }
 
+  void approveCustomer(CustomerMaster customer) async {
+    var result = await ApiServiceCustomerMaster.changeStatus(customer, 4, 0);
+    if (result.hasError == false) {
+      Get.snackbar(
+        'Success',
+        'Customer approved successfully',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+        margin: EdgeInsets.all(10),
+      );
+      await getCustomers();
+    } else {
+      Get.snackbar(
+        'Error',
+        result.errors?.firstOrNull?.message ?? 'Error approving customer',
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+        margin: EdgeInsets.all(10),
+      );
+    }
+  }
+
 }

@@ -41,11 +41,12 @@ Future<Map<String, dynamic>?> webServiceClientAPI(
   final myUri = Uri.parse('${AppConstants.apiBaseUrl}$url');
   http.Response? response;
   Map? mapExtra = {};
+  mapExtra['AppType'] = 2;
   mapExtra['Device'] = 1;
   mapExtra['DeviceVersion'] = "1.0";
   if (addDeviceinfo) {
     if (Platform.isWindows) {
-      mapExtra['DeviceID'] = '0';
+      mapExtra['DeviceID'] = 0;
       mapExtra['DeviceName'] = '${Platform.localHostname} ${Platform.operatingSystem}';
     }
   }
@@ -54,8 +55,8 @@ Future<Map<String, dynamic>?> webServiceClientAPI(
   try {
     if (kDebugMode) {
       // print(myUri);
-      // print(header);
-       print(map);
+      //  print(header);
+      //  print(map);
     }
     if (methodType == HTTP_POST) {
       response = await http.post(
@@ -86,9 +87,11 @@ Future<Map<String, dynamic>?> webServiceClientAPI(
     }
 
     var statusCode = response!.statusCode;
-    // if (kDebugMode) {
-    //   print(statusCode);
-    // }
+     if (kDebugMode) {
+      //  print(statusCode);
+      //  print(response.body);
+      // print(responseBody);
+    }
     if (statusCode == WS_STATUSCODE_UNAUTHORIZED_401) {
       //
     } else {
@@ -204,8 +207,9 @@ Future<Map<String, dynamic>?> webServiceUploadFile(
     request.fields.addAll({
       "Device": "1",
       "DeviceVersion": "1.0",
-      if (Platform.isWindows) "DeviceID": Platform.localHostname,
-      if (Platform.isWindows) "DeviceName": Platform.operatingSystem,
+      "AppType": "2",
+      "DeviceID": "0",
+      "DeviceName": Platform.operatingSystem,
     });
     var streamedResponse = await request.send();
     var responseBody = json.decode(await (streamedResponse.stream).bytesToString());

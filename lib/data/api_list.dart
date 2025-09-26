@@ -51,7 +51,9 @@ class ApiList {
   static const String orderRemoveItem = "api/Order/remove-item";
 
   static const String orderAutoLock = "api/Order/auto-lock";
-  
+  static const String orderLockNotification = "api/Order/lock-notification";
+  static const String orderAutoCancel = "api/Order/auto-cancel";
+
   static const String rptOrderEstimate = "api/Report/order-estimate";
   
   
