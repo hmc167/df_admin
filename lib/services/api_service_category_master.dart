@@ -30,6 +30,7 @@ class ApiServiceCategoryMaster {
           'IsActive': category.isActive,
           'Upcoming': category.upcoming,
           'ParentCategoryMasterId': category.parentCategoryMasterId,
+          'CategorytypeId': category.categoryTypeId,
         });
     var model = SaveMasterResponse.fromJson(response!);
     return model;

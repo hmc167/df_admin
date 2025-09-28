@@ -143,6 +143,14 @@ class _ProductCategoryViewState extends State<ProductCategoryView> {
                     ),
                   ),
                   SizedBox(
+                    width: 150,
+                    child: Text(
+                      'Type',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  SizedBox(
                     width: 80,
                     child: Text(
                       'Upcoming',
@@ -210,19 +218,16 @@ class _ProductCategoryViewState extends State<ProductCategoryView> {
                             Expanded(
                               child: SizedBox(
                                 child: Text(
-                                  category.parentCategoryMasterId == null ||
-                                          category.parentCategoryMasterId == 0
-                                      ? '--'
-                                      : controller.parentCategories
-                                                .where(
-                                                  (c) =>
-                                                      c.iD ==
-                                                      category
-                                                          .parentCategoryMasterId,
-                                                ).firstOrNull?.name ??
-                                            '',
+                                  category.parentCategoryMasterName ?? '--',
                                   textAlign: TextAlign.left,
                                 ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 150,
+                              child: Text(
+                                category.categoryType ?? '--',
+                                textAlign: TextAlign.left,
                               ),
                             ),
                             SizedBox(
@@ -246,7 +251,6 @@ class _ProductCategoryViewState extends State<ProductCategoryView> {
                               ),
                             ),
 
-                            
                             MouseRegion(
                               cursor: SystemMouseCursors.click,
                               child: GestureDetector(
@@ -332,7 +336,6 @@ class _ProductCategoryViewState extends State<ProductCategoryView> {
                           ),
                         ),
                       ),
-                  
                   ],
                 ),
               ),

@@ -12,7 +12,7 @@ class Helpers {
     bool allowClose = true,
   }) {
     width ??= Get.width * 0.98;
-    height ??= Get.height * 0.85;
+    height ??= Get.height * 0.90;
 
     AlertDialog alert = AlertDialog(
       contentPadding: EdgeInsets.zero,

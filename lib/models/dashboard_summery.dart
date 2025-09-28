@@ -80,7 +80,7 @@ class DashboardData {
   DashboardData.fromJson(Map<String, dynamic> json) {
     totalOrder = json['TotalOrder'];
     lockOrder = json['LockOrder'];
-    unLockRequest = json['UnLockRequest'];
+    unLockRequest = json['UnLockedRequest'];
     totalCategory = json['TotalCategory'];
     totalProduct = json['TotalProduct'];
     totalProductActive = json['TotalProductActive'];
@@ -96,7 +96,7 @@ class DashboardData {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['TotalOrder'] = totalOrder;
     data['LockOrder'] = lockOrder;
-    data['UnLockRequest'] = unLockRequest;
+    data['UnLockedRequest'] = unLockRequest;
     data['TotalCategory'] = totalCategory;
     data['TotalProduct'] = totalProduct;
     data['TotalProductActive'] = totalProductActive;

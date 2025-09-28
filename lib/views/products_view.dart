@@ -24,12 +24,10 @@ class _ProductsViewState extends State<ProductsView> {
     if (args != null && args is Map && args['status'] != null) {
       controller.filterStatus.value = args['status'] as int;
       controller.searchProducts();
-    }
-    else if (args != null && args is Map && args['search'] != null) {
+    } else if (args != null && args is Map && args['search'] != null) {
       controller.filterNameController.text = args['search'] as String;
       controller.searchProducts();
-    }
-    else{
+    } else {
       controller.loadData();
     }
   }
@@ -67,6 +65,35 @@ class _ProductsViewState extends State<ProductsView> {
               child: Row(
                 spacing: 20,
                 children: [
+                  Obx(
+                    () => DropdownButton<int>(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      value: controller.filterCategoryId.value,
+                      borderRadius: BorderRadius.zero,
+                      underline: const DropdownButtonHideUnderline(
+                        child: SizedBox.shrink(),
+                      ),
+                      items: [
+                        DropdownMenuItem<int>(
+                          value: 0,
+                          child: Text('All Categories'),
+                        ),
+                        ...controller.productCategories
+                            .where((x) => x.iD != 0)
+                            .map(
+                              (category) => DropdownMenuItem<int>(
+                                value: category.iD ?? 0,
+                                child: Text(category.name ?? ''),
+                              ),
+                            ),
+                      ],
+                      onChanged: (value) {
+                        controller.filterCategoryId.value = value ?? 0;
+                      },
+                      hint: Text('Select Category'),
+                      dropdownColor: Colors.white,
+                    ),
+                  ),
                   Expanded(
                     child: TextField(
                       controller: controller.filterNameController,
@@ -275,9 +302,10 @@ class _ProductsViewState extends State<ProductsView> {
                                 children: [
                                   InkWell(
                                     onTap: () async {
-                                      await controller.openManageProductVariantPopup(
-                                        product,
-                                      );
+                                      await controller
+                                          .openManageProductVariantPopup(
+                                            product,
+                                          );
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -288,7 +316,7 @@ class _ProductsViewState extends State<ProductsView> {
                                       ),
                                     ),
                                   ),
-                                  
+
                                   InkWell(
                                     onTap: () async {
                                       await controller.openAddProductPopup(

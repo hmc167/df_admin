@@ -115,9 +115,9 @@ class _ReportDailyOrderProductViewState
                   ),
                   Spacer(),
                   CommonButton(
-                    width: 110,
-                    text: 'Print',
-                    icon: Icons.print,
+                    width: 150,
+                    text: 'Download',
+                    icon: Icons.download,
                     onTap: () async {
                       await controller.savePdf('OrderEstimateReport_${controller.filterOrderDateController.text.replaceAll('-', '')}.pdf');
                     },

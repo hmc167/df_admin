@@ -92,6 +92,8 @@ class CategoryMaster {
   String? createdDate;
   String? parentCategoryMasterName;
   String? updatedDate;
+  int? categoryTypeId;
+  String? categoryType;
 
   CategoryMaster({
     this.iD,
@@ -106,6 +108,8 @@ class CategoryMaster {
     this.createdDate,
     this.parentCategoryMasterName,
     this.updatedDate,
+    this.categoryTypeId,
+    this.categoryType,
   });
 
   CategoryMaster.fromJson(Map<String, dynamic> json) {
@@ -121,6 +125,8 @@ class CategoryMaster {
     createdDate = json['CreatedDate'];
     parentCategoryMasterName = json['ParentCategoryMasterName'];
     updatedDate = json['UpdatedDate'];
+    categoryTypeId = json['CategoryTypeId'];
+    categoryType = json['CategoryType'];
   }
 
   Map<String, dynamic> toJson() {
@@ -137,6 +143,8 @@ class CategoryMaster {
     data['CreatedDate'] = createdDate;
     data['ParentCategoryMasterName'] = parentCategoryMasterName;
     data['UpdatedDate'] = updatedDate;
+    data['CategoryTypeId'] = categoryTypeId;
+    data['CategoryType'] = categoryType;
     return data;
   }
 }

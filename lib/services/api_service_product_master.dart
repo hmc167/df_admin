@@ -16,7 +16,7 @@ class ApiServiceProductMaster {
     bool? active,
     bool? isOutOfStock,
     int pNo = 1,
-    int pSize = 50,
+    int pSize = 100,
   }) async {
     final response = await webServiceClientAPI(
       HTTP_POST,
@@ -68,7 +68,8 @@ class ApiServiceProductMaster {
         "MinOrderQty": product.minOrderQty,
         "SortOrder": product.sortOrder,
         "IsActive": product.isActive,
-        "TaxIds": product.taxIds??'',
+        "TaxIds": product.taxIds ?? '',
+        "SearchKey": product.searchKey ?? '',
         "ClusterMappings": product.productClusterMappings
             ?.map((c) => c.toJson())
             .toList(),
@@ -154,7 +155,7 @@ class ApiServiceProductMaster {
   static Future<ProductSearchModel> allSearch(
     int categoryId, {
     String searchString = '',
-    int clusterId = 0
+    int clusterId = 0,
   }) async {
     final response = await webServiceClientAPI(
       HTTP_POST,
@@ -163,12 +164,11 @@ class ApiServiceProductMaster {
         "Filter": {
           "ClusterId": clusterId,
           "CategoryId": categoryId,
-          "SearchString": searchString
+          "SearchString": searchString,
         },
       },
     );
     var model = ProductSearchModel.fromJson(response!);
     return model;
   }
-
 }

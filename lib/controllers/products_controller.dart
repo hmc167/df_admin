@@ -41,6 +41,7 @@ class ProductsController extends GetxController {
   final nutrientInfoController = TextEditingController();
   final storageTipsController = TextEditingController();
   final shelfLifeController = TextEditingController();
+  final searchKeyController = TextEditingController();
 
   final nameFocusNode = FocusNode();
   final parentCategoryFocusNode = FocusNode();
@@ -67,7 +68,7 @@ class ProductsController extends GetxController {
     });
   }
 
-   void loadData() {
+  void loadData() {
     getProducts();
   }
 
@@ -94,6 +95,7 @@ class ProductsController extends GetxController {
     nutrientInfoController.clear();
     storageTipsController.clear();
     shelfLifeController.clear();
+    searchKeyController.clear();
 
     imagesList.value = [];
     clusterMappings.value = [];
@@ -132,6 +134,7 @@ class ProductsController extends GetxController {
     nutrientInfoController.text = product.nutrientInfo ?? '';
     storageTipsController.text = product.storageTips ?? '';
     shelfLifeController.text = (product.shelfLife ?? 0).toString();
+    searchKeyController.text = product.searchKey ?? '';
 
     await Helpers.showPopup(
       Column(
@@ -142,7 +145,7 @@ class ProductsController extends GetxController {
           Container(
             padding: const EdgeInsets.all(20),
             child: Text(
-              productId > 0 ? 'Edit Product' : 'Add New Product',
+              productId > 0 ? 'Edit Product (${product.name})' : 'Add New Product',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
           ),
@@ -445,7 +448,7 @@ class ProductsController extends GetxController {
                                       ),
                                       keyboardType: TextInputType.text,
                                       textAlign: TextAlign.start,
-                                      maxLines: 2,
+                                      maxLines: 1,
                                     ),
                                   ),
                                   Expanded(
@@ -454,6 +457,26 @@ class ProductsController extends GetxController {
                                       decoration: InputDecoration(
                                         hintText: 'ShelfLife',
                                         labelText: 'ShelfLife',
+                                        border: OutlineInputBorder(),
+                                        alignLabelWithHint: true,
+                                      ),
+                                      keyboardType: TextInputType.text,
+                                      textAlign: TextAlign.start,
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 20),
+                              Row(
+                                spacing: 20,
+                                children: [
+                                  Expanded(
+                                    child: TextFormField(
+                                      controller: searchKeyController,
+                                      decoration: InputDecoration(
+                                        hintText: 'Search Keys',
+                                        labelText: 'Search Keys',
                                         border: OutlineInputBorder(),
                                         alignLabelWithHint: true,
                                       ),
@@ -731,27 +754,32 @@ class ProductsController extends GetxController {
                                                   Text('Active'),
                                               ],
                                             ),
-                                            trailing:(cluster.isActive ?? false) ? IconButton(
-                                              icon: Icon(
-                                                Icons.delete,
-                                                color: Colors.red,
-                                              ),
-                                              onPressed: () {
-                                                cluster.isActive = false;
-                                                clusterMappings[index] = cluster;
-                                                clusterMappings.refresh();
-                                              },
-                                            ) : IconButton(
-                                              icon: Icon(
-                                                Icons.add,
-                                                color: Colors.green,
-                                              ),
-                                              onPressed: () {
-                                                cluster.isActive = true;
-                                                clusterMappings[index] = cluster;
-                                                clusterMappings.refresh();
-                                              },
-                                            ),
+                                            trailing:
+                                                (cluster.isActive ?? false)
+                                                ? IconButton(
+                                                    icon: Icon(
+                                                      Icons.delete,
+                                                      color: Colors.red,
+                                                    ),
+                                                    onPressed: () {
+                                                      cluster.isActive = false;
+                                                      clusterMappings[index] =
+                                                          cluster;
+                                                      clusterMappings.refresh();
+                                                    },
+                                                  )
+                                                : IconButton(
+                                                    icon: Icon(
+                                                      Icons.add,
+                                                      color: Colors.green,
+                                                    ),
+                                                    onPressed: () {
+                                                      cluster.isActive = true;
+                                                      clusterMappings[index] =
+                                                          cluster;
+                                                      clusterMappings.refresh();
+                                                    },
+                                                  ),
                                           ),
                                         );
                                       },
@@ -761,7 +789,6 @@ class ProductsController extends GetxController {
                               ],
                             ),
                           ),
-                          
                         ],
                       ),
                     ),
@@ -869,6 +896,13 @@ class ProductsController extends GetxController {
       }
 
       //List<ClusterMappings> clusterMappings = [];
+      List<ProductImages> saveImagesList = [];
+      if (imagesList.value.isNotEmpty) {
+        imagesList.forEach((image) {
+          image.path = image.fileKey ?? image.path?.trim();
+          saveImagesList.add(image);
+        });
+      }
       final newProduct = ProductMaster(
         iD: productId,
         name: nameController.text,
@@ -878,6 +912,7 @@ class ProductsController extends GetxController {
         nutrientInfo: nutrientInfoController.text,
         storageTips: storageTipsController.text,
         shelfLife: int.parse(shelfLifeController.text),
+        searchKey: searchKeyController.text,
         unitCategoryMasterId: unitCategoryMasterId,
         categoryMasterId: categoryId,
         isOutOfStock: isOutOfStock.value,
@@ -886,7 +921,7 @@ class ProductsController extends GetxController {
         sortOrder: int.tryParse(sortOrderController.text) ?? 0,
         isActive: status.value,
         productClusterMappings: clusterMappings.value,
-        productImages: imagesList.value,
+        productImages: saveImagesList,
       );
 
       final result = await ApiServiceProductMaster.save(newProduct);
@@ -985,6 +1020,7 @@ class ProductsController extends GetxController {
     final result = await ApiServiceProductMaster.all(
       filterNameController.text,
       active: (status == 0) ? null : (status == 1 ? true : false),
+      categoryId : filterCategoryId.value,
     );
     if (result.hasError == false) {
       var dbProducts = result.data?.records ?? [];
@@ -1011,9 +1047,9 @@ class ProductsController extends GetxController {
           ),
         ];
         pCats.addAll(
-          dbCategories.toList()
-              // .where((c) => (c.parentCategoryMasterId ?? 0) != 0)
-              // .toList(),
+          dbCategories.toList(),
+          // .where((c) => (c.parentCategoryMasterId ?? 0) != 0)
+          // .toList(),
         );
         productCategories.value = pCats;
       }
@@ -1039,30 +1075,30 @@ class ProductsController extends GetxController {
 
   Future<void> searchProducts() async {
     await getProducts();
-    String text = filterNameController.text;
-    int value = filterCategoryId.value;
-    int value2 = filterStatus.value;
+    // String text = filterNameController.text;
+    // int value = filterCategoryId.value;
+    // int value2 = filterStatus.value;
 
-    List<ProductMaster> filtered = products.where((product) {
-      final matchesName =
-          text.isEmpty ||
-          (product.name?.toLowerCase().contains(text.toLowerCase()) ?? false);
-      final matchesParent = value == 0 || product.categoryMasterId == value;
-      final matchesStatus =
-          value2 == 0 ||
-          (value2 == 1 ? product.isActive == true : product.isActive == false);
-      return matchesName && matchesParent && matchesStatus;
-    }).toList();
-    products.value = filtered;
+    // List<ProductMaster> filtered = products.where((product) {
+    //   final matchesName =
+    //       text.isEmpty ||
+    //       (product.name?.toLowerCase().contains(text.toLowerCase()) ?? false);
+    //   final matchesParent = value == 0 || product.categoryMasterId == value;
+    //   final matchesStatus =
+    //       value2 == 0 ||
+    //       (value2 == 1 ? product.isActive == true : product.isActive == false);
+    //   return matchesName && matchesParent && matchesStatus;
+    // }).toList();
+    // products.value = filtered;
   }
 
   Future<void> openManageProductVariantPopup(ProductMaster product) async {
     int productId = product.iD ?? 0;
     if (productId > 0) {
-      var productVariants =  await ApiServiceProductMaster.getVarients(
+      var productVariants = await ApiServiceProductMaster.getVarients(
         productId,
       );
-      if(productVariants.hasError == false){
+      if (productVariants.hasError == false) {
         Helpers.showPopup(
           ProductVariantPopup(
             product: product,
@@ -1073,7 +1109,8 @@ class ProductsController extends GetxController {
       } else {
         Get.snackbar(
           'Error',
-          productVariants.errors?.firstOrNull?.message ?? 'Error loading variants',
+          productVariants.errors?.firstOrNull?.message ??
+              'Error loading variants',
           backgroundColor: Colors.redAccent,
           colorText: Colors.white,
           snackPosition: SnackPosition.BOTTOM,

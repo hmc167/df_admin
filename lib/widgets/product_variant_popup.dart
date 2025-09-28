@@ -107,6 +107,8 @@ class _ProductVariantPopupState extends State<ProductVariantPopup> {
                               itemBuilder: (context, vIndex) {
                                 final v = variant.productVariants![vIndex];
                                 return Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Row(
                                       children: [
@@ -122,6 +124,26 @@ class _ProductVariantPopupState extends State<ProductVariantPopup> {
                                         const SizedBox(width: 16),
                                         Expanded(
                                           child: Text(v.unitName ?? ''),
+                                        ),
+                                        const SizedBox(width: 16),
+                                        SizedBox(
+                                          width: 150,
+                                          child: TextFormField(
+                                            initialValue:
+                                                v.unitValue?.toString() ?? '',
+                                            decoration: const InputDecoration(
+                                              labelText: 'Unit Price',
+                                            ),
+                                            keyboardType:
+                                                TextInputType.number,
+                                            onChanged: (val) {
+                                              setState(() {
+                                                v.unitValue = double.tryParse(
+                                                  val,
+                                                );
+                                              });
+                                            },
+                                          ),
                                         ),
                                         const SizedBox(width: 16),
                                         SizedBox(
@@ -188,6 +210,24 @@ class _ProductVariantPopupState extends State<ProductVariantPopup> {
                                         
                                       ],
                                     ),
+                                    SizedBox(
+                                          width: 450,
+                                          child: TextFormField(
+                                            initialValue:
+                                                v.notes ?? '',
+                                            decoration: const InputDecoration(
+                                              labelText: 'Notes',
+                                            ),
+                                            keyboardType:
+                                                TextInputType.text,
+                                            onChanged: (val) {
+                                              setState(() {
+                                                v.notes = val;
+                                                });
+                                            },
+                                          ),
+                                        ),
+                                        
                                     if(vIndex != variant.productVariants!.length - 1)
                                     Divider(),
                                   ],

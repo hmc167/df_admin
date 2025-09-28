@@ -25,6 +25,7 @@ class ProductCategoryController extends GetxController {
   final upcoming = false.obs;
   final parentCategoryId = 0.obs;
   final image = "".obs;
+  final categoryTypeId = 0.obs;
 
   final nameFocusNode = FocusNode();
   final parentCategoryFocusNode = FocusNode();
@@ -52,6 +53,7 @@ class ProductCategoryController extends GetxController {
     status.value = false;
     upcoming.value = false;
     parentCategoryId.value = 0;
+    categoryTypeId.value = 0;
     nameFocusNode.requestFocus();
     image.value = "";
     pickedImageFile.value = null;
@@ -65,6 +67,7 @@ class ProductCategoryController extends GetxController {
   status.value = category.isActive ?? false;
   upcoming.value = category.upcoming ?? false;
   parentCategoryId.value = category.parentCategoryMasterId ?? 0;
+  categoryTypeId.value = category.categoryTypeId ?? 0;
   image.value = category.image ?? '';
   pickedImageFile.value = null;
     await Helpers.showPopup(
@@ -341,6 +344,7 @@ class ProductCategoryController extends GetxController {
       isActive: status.value,
       upcoming: upcoming.value,
       image: image.value,
+      categoryTypeId: categoryTypeId.value,
     );
 
     final result = await ApiServiceCategoryMaster.save(newCategory);
@@ -357,8 +361,14 @@ class ProductCategoryController extends GetxController {
       );
       await getCategories();
     } else {
-      errorMessage.value =
-          result.errors?.firstOrNull?.message ?? 'Error saving category';
+          Get.snackbar(
+            'Error',
+            result.message?.message ?? result.errors?.firstOrNull?.message ?? 'Error saving category',
+            backgroundColor: Colors.redAccent,
+            colorText: Colors.white,
+            snackPosition: SnackPosition.BOTTOM,
+            margin: EdgeInsets.all(10),
+          );
       return;
     }
   }
