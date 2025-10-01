@@ -37,7 +37,8 @@ AppBar getAppBar() {
                 if (value == 'Logout') loginController.logout();
               },
               itemBuilder: (BuildContext context) {
-                return {'Profile', 'Change Password', 'Logout'}
+                //return {'Profile', 'Change Password', 'Logout'}
+                return {'Profile', 'Logout'}
                     .map(
                       (String choice) => PopupMenuItem<String>(
                         value: choice,
@@ -514,7 +515,7 @@ Widget getAppDrawer() {
               title: Text('Order', style: TextStyle(color: Colors.black)),
               onTap: () {
                 loginController.selectMenu('Reports-Order');
-                Get.offAllNamed(Routes.ORDERS);
+                Get.offAllNamed(Routes.REPORTORDER);
               },
               selected: loginController.selectedMenu.value == 'Reports-Order',
               selectedTileColor: Colors.blueGrey[100],
@@ -523,7 +524,7 @@ Widget getAppDrawer() {
               title: Text('Customer', style: TextStyle(color: Colors.black)),
               onTap: () {
                 loginController.selectMenu('Reports-Customer');
-                Get.offAllNamed(Routes.CUSTOMERS);
+                Get.offAllNamed(Routes.REPORTCUSTOMER);
               },
               selected:
                   loginController.selectedMenu.value == 'Reports-Customer',
@@ -547,7 +548,7 @@ Widget getAppDrawer() {
               title: Text('Product', style: TextStyle(color: Colors.black)),
               onTap: () {
                 loginController.selectMenu('Reports-Product');
-                Get.offAllNamed(Routes.PRODUCTS);
+                Get.offAllNamed(Routes.REPORTPRODUCT);
               },
               selected: loginController.selectedMenu.value == 'Reports-Product',
               selectedTileColor: Colors.blueGrey[100],
@@ -559,7 +560,7 @@ Widget getAppDrawer() {
               ),
               onTap: () {
                 loginController.selectMenu('Reports-FarmersAccount');
-                Get.offAllNamed(Routes.FARMERSACCOUNT);
+                Get.offAllNamed(Routes.REPORTFARMERSACCOUNT);
               },
               selected:
                   loginController.selectedMenu.value ==
@@ -573,7 +574,7 @@ Widget getAppDrawer() {
               ),
               onTap: () {
                 loginController.selectMenu('Reports-DailyFarmersAccount');
-                Get.offAllNamed(Routes.REPORTFARMERSACCOUNT);
+                Get.offAllNamed(Routes.REPORTDAILYFARMERSACCOUNT);
               },
               selected:
                   loginController.selectedMenu.value ==
@@ -584,7 +585,7 @@ Widget getAppDrawer() {
               title: Text('Expenses', style: TextStyle(color: Colors.black)),
               onTap: () {
                 loginController.selectMenu('Reports-Expenses');
-                Get.offAllNamed(Routes.EXPENSES);
+                Get.offAllNamed(Routes.REPORTEXPENSES);
               },
               selected:
                   loginController.selectedMenu.value == 'Reports-Expenses',

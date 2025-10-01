@@ -15,6 +15,7 @@ class ReportDailyOrderProductController extends GetxController {
   var isLoading = false.obs;
   final filterOrderDateController = TextEditingController();
 
+  final includeUnLockItem = false.obs;
   final onlyItemDetails = false.obs;
   Rxn<DateTime> filterOrderDate = Rxn<DateTime>();
   RxList<OrderEstimate> orderEstimates = <OrderEstimate>[].obs;
@@ -79,6 +80,7 @@ class ReportDailyOrderProductController extends GetxController {
 
   void resetSearchFilters() {
     onlyItemDetails.value = false;
+    includeUnLockItem.value = false;
     filterOrderDate.value = DateTime.now();
     filterOrderDateController.text =
         "${DateTime.now().year}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}";
@@ -98,6 +100,7 @@ class ReportDailyOrderProductController extends GetxController {
         0,
       ),
       onlyItemDetails.value,
+      includeUnLockItem.value,
     );
     if (result.hasError == false) {
       reportString.value = result.data?.reportString ?? '';

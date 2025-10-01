@@ -1,3 +1,4 @@
+import 'package:admin/utils/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/orders_controller.dart';
@@ -241,7 +242,9 @@ class _OrdersViewState extends State<OrdersView> {
                     text: 'Search',
                     icon: Icons.search,
                     onTap: () async {
-                      controller.search();
+                      Get.showOverlay(asyncFunction:  () async {
+                        await controller.search();
+                      }, loadingWidget: Helpers.loadingWidget());
                     },
                   ),
                   CommonButton(
@@ -252,7 +255,10 @@ class _OrdersViewState extends State<OrdersView> {
                     textColor: AppColors.primaryColor,
                     onTap: () async {
                       // Reset search filters
-                      controller.resetSearchFilters();
+                      
+                      Get.showOverlay(asyncFunction:  () async {
+                        await controller.resetSearchFilters();
+                      }, loadingWidget: Helpers.loadingWidget());
                     },
                   ),
                   SizedBox(width: 20),
@@ -542,9 +548,9 @@ class _OrdersViewState extends State<OrdersView> {
                       color: AppColors.secondaryColor,
                       borderColor: AppColors.secondaryColor,
                       width: 240,
-                      text: controller.isLockingOrder.value ? 'Sending...' : 'Lock Notification',
+                      text: controller.isNotifyingLockOrder.value ? 'Sending...' : 'Lock Notification',
                       icon: Icons.notifications_active,
-                      onTap: controller.isLockingOrder.value
+                      onTap: controller.isNotifyingLockOrder.value
                           ? () {}
                           : () async {
                               await controller.sendLockNotification();
@@ -556,9 +562,9 @@ class _OrdersViewState extends State<OrdersView> {
                       color: AppColors.warningColor,
                       borderColor: AppColors.warningColor,
                       width: 265,
-                      text: controller.isLockingOrder.value ? 'Canceling...' : 'Cancel Unlocked Orders',
+                      text: controller.isCancellingOrder.value ? 'Canceling...' : 'Cancel Unlocked Orders',
                       icon: Icons.notifications_active,
-                      onTap: controller.isLockingOrder.value
+                      onTap: controller.isCancellingOrder.value
                           ? () {}
                           : () async {
                               await controller.orderAutoCancel();

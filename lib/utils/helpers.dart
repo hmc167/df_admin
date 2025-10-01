@@ -5,6 +5,14 @@ import 'package:get/route_manager.dart';
 import '../widgets/common_button.dart';
 
 class Helpers {
+  static Widget loadingWidget() {
+    return Center(
+      child: CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryColor),
+      ),
+    );
+  }
+
   static Future<T?> showPopup<T>(
     Widget item, {
     double? width,

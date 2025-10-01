@@ -19,6 +19,8 @@ import '../widgets/order_status_history_popup.dart';
 
 class OrdersController extends GetxController {
    RxBool isLockingOrder = false.obs;
+   RxBool isCancellingOrder = false.obs;
+   RxBool isNotifyingLockOrder = false.obs;
   var isLoading = false.obs;
 
   final filterNameController = TextEditingController();
@@ -62,11 +64,11 @@ class OrdersController extends GetxController {
     });
   }
 
-  void search() {
-    getOrders();
+  Future<void> search() async {
+    await getOrders();
   }
 
-  void resetSearchFilters() {
+  Future<void> resetSearchFilters() async {
     filterNameController.clear();
     filterOnlyLock.value = false;
     filterStatus.value = -1;
@@ -80,7 +82,7 @@ class OrdersController extends GetxController {
     filterEndDate.value = DateTime.now();
     filterEndDateController.text =
         "${DateTime.now().year}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}";
-    getOrders();
+    await getOrders();
   }
 
   Future<void> openAddPopup(int orderId) async {
@@ -505,9 +507,9 @@ class OrdersController extends GetxController {
       message: 'Are you sure you want to send notifications for all orders?',
     );
     if (!confirmed) return;
-    isLockingOrder.value = true;
+    isNotifyingLockOrder.value = true;
     var result = await ApiServiceOrder.lockNotification(DateTime.now());
-    isLockingOrder.value = false;
+    isNotifyingLockOrder.value = false;
     if(result.hasError == false){
       await getOrders();
       Get.snackbar(
@@ -536,9 +538,9 @@ class OrdersController extends GetxController {
       message: 'Are you sure you want to cancel all unlocked orders?',
     );
     if (!confirmed) return;
-    isLockingOrder.value = true;
+    isCancellingOrder.value = true;
     var result = await ApiServiceOrder.orderAutoCancel(DateTime.now());
-    isLockingOrder.value = false;
+    isCancellingOrder.value = false;
     if(result.hasError == false){
       await getOrders();
       Get.snackbar(

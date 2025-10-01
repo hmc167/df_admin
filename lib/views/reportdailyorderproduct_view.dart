@@ -85,6 +85,19 @@ class _ReportDailyOrderProductViewState
                     () => Row(
                       children: [
                         Switch(
+                          value: controller.includeUnLockItem.value,
+                          onChanged: (value) {
+                            controller.includeUnLockItem.value = value;
+                          },
+                        ),
+                        Text('Include Unlocked Items'),
+                      ],
+                    ),
+                  ),
+                  Obx(
+                    () => Row(
+                      children: [
+                        Switch(
                           value: controller.onlyItemDetails.value,
                           onChanged: (value) {
                             controller.onlyItemDetails.value = value;
@@ -153,11 +166,11 @@ class _ReportDailyOrderProductViewState
                         //   ),
                         // ),                        
                       //),
-                    : HtmlPdfPreview(
-                        html: controller.reportString.value,
-                        pdfFileName:
-                            'Order_Estimate_${controller.filterOrderDateController.text.replaceAll('-', '')}.pdf',
-                      ),
+                     : HtmlPdfPreview(
+                         html: controller.reportString.value,
+                         pdfFileName:
+                             'Order_Estimate_${controller.filterOrderDateController.text.replaceAll('-', '')}.pdf',
+                       ),
               ),
             ),
           ],
