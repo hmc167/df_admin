@@ -299,7 +299,7 @@ class CustomersController extends GetxController {
     }
   }
 
-  getPaymentModeText(int? paymentMode) {
+  String getPaymentModeText(int? paymentMode) {
     switch (paymentMode) {
       case 0:
         return 'Cash';
