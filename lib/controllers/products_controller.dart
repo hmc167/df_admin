@@ -48,7 +48,7 @@ class ProductsController extends GetxController {
   final sortOrderFocusNode = FocusNode();
   final statusFocusNode = FocusNode();
 
-  final isLoading = false.obs;
+  final isLoading = true.obs;
 
   final errorMessage = ''.obs;
 
@@ -68,8 +68,13 @@ class ProductsController extends GetxController {
     });
   }
 
-  void loadData() {
-    getProducts();
+  Future<void> loadData() async {
+    Get.showOverlay(
+      asyncFunction: () async {
+        await getProducts();
+      },
+      loadingWidget: Helpers.loadingWidget(),
+    );
   }
 
   void toggleStatus() {
@@ -145,7 +150,9 @@ class ProductsController extends GetxController {
           Container(
             padding: const EdgeInsets.all(20),
             child: Text(
-              productId > 0 ? 'Edit Product (${product.name})' : 'Add New Product',
+              productId > 0
+                  ? 'Edit Product (${product.name})'
+                  : 'Add New Product',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
           ),
@@ -1016,20 +1023,29 @@ class ProductsController extends GetxController {
   }
 
   Future<void> getProducts() async {
-    int status = filterStatus.value;
-    final result = await ApiServiceProductMaster.all(
-      filterNameController.text,
-      active: (status == 0) ? null : (status == 1 ? true : false),
-      categoryId : filterCategoryId.value,
-    );
-    if (result.hasError == false) {
-      var dbProducts = result.data?.records ?? [];
-      if (dbProducts.isNotEmpty) {
-        products.value = dbProducts;
+    errorMessage.value = '';
+    try {
+      int status = filterStatus.value;
+      final result = await ApiServiceProductMaster.all(
+        filterNameController.text,
+        active: (status == 0) ? null : (status == 1 ? true : false),
+        categoryId: filterCategoryId.value,
+      );
+      if (result.hasError == false) {
+        var dbProducts = result.data?.records ?? [];
+        if (dbProducts.isNotEmpty) {
+          products.value = dbProducts;
+        }
+      } else {
+        errorMessage.value =
+            result.errors?.firstOrNull?.message ?? 'No record found';
       }
-    } else {
-      errorMessage.value =
-          result.errors?.firstOrNull?.message ?? 'No record found';
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -1074,7 +1090,12 @@ class ProductsController extends GetxController {
   }
 
   Future<void> searchProducts() async {
-    await getProducts();
+    Get.showOverlay(
+      asyncFunction: () async {
+        await getProducts();
+      },
+      loadingWidget: Helpers.loadingWidget(),
+    );
     // String text = filterNameController.text;
     // int value = filterCategoryId.value;
     // int value2 = filterStatus.value;

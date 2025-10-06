@@ -147,10 +147,11 @@ class OrdersController extends GetxController {
     }
   }
 
-  Future<void> getProducts(int categoryId) async {
+  Future<void> getProducts(int categoryId,String searchString,) async {
     final result = await ApiServiceProductMaster.allSearch(
       categoryId,
       clusterId: clusters.firstOrNull?.iD ?? 0,
+      searchString: searchString,
     );
     if (result.hasError == false) {
       var dbProducts = result.data?.records ?? [];

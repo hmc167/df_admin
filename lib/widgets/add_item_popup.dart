@@ -18,9 +18,10 @@ class AddItemPopup extends StatefulWidget {
 
 class _AddItemPopupState extends State<AddItemPopup> {
   int? selectedVariantIndex;
-
+  TextEditingController searchController = TextEditingController(text: '');
   @override
   void dispose() {
+    searchController.dispose();
     super.dispose();
   }
 
@@ -36,15 +37,34 @@ class _AddItemPopupState extends State<AddItemPopup> {
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            spacing: 10,
             children: [
               Text(
-                'Add New Item',
+                'Add Item',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-              Spacer(),
-              SizedBox(width: 20),
               SizedBox(
-                width: 500,
+                width: 300,
+                child: TextField(
+                  controller: searchController,
+                  decoration: InputDecoration(
+                    labelText: 'Search Product',
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                  ),
+                  onChanged: (value) {
+                    if (value.trim().length > 3) {
+                      widget.controller.getProducts(0, value.trim());
+                    }
+                  },
+                ),
+              ),
+
+              SizedBox(
+                width: 400,
                 child: DropdownButtonFormField<CategoryMaster>(
                   decoration: InputDecoration(
                     labelText: 'Select Category',
@@ -64,7 +84,8 @@ class _AddItemPopupState extends State<AddItemPopup> {
                       .toList(),
                   onChanged: (CategoryMaster? newValue) {
                     if (newValue != null) {
-                      widget.controller.getProducts(newValue.iD ?? 0);
+                      searchController.text = '';
+                      widget.controller.getProducts(newValue.iD ?? 0, '');
                       setState(() {});
                     }
                   },
@@ -98,170 +119,196 @@ class _AddItemPopupState extends State<AddItemPopup> {
                         final product = widget.controller.products[index];
                         final variants = product.productVariants ?? [];
                         return ListTile(
-                          title: Text(product.name ?? ''),
-                          subtitle: Text(product.shortDescription ?? ''),
-                          trailing: InkWell(
-                            onTap: () {
-                              TextEditingController qtyController =
-                                  TextEditingController();
-                              qtyController.text = '1';
-                              int? dialogSelectedVariantIndex = 0;
-                              widget.controller.selectedVariant.value = 0;
+                          textColor: ((product.isOutOfStock ?? false) == true)
+                              ? Colors.red
+                              : Colors.black,
+                          title: Row(
+                            spacing: 10,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(product.name ?? ''),
+                              Text(product.categoryName ?? ''),
+                            ],
+                          ),
+                          subtitle: ((product.isOutOfStock ?? false) == true)
+                              ? Text('Out of stock')
+                              : Text(product.shortDescription ?? ''),
+                          trailing: ((product.isOutOfStock ?? false) == true)
+                              ? Icon(
+                                  Icons.remove_shopping_cart,
+                                  size: 40,
+                                  color: Colors.grey,
+                                )
+                              : InkWell(
+                                  onTap: () {
+                                    TextEditingController qtyController =
+                                        TextEditingController();
+                                    qtyController.text = '1';
+                                    int? dialogSelectedVariantIndex = 0;
+                                    widget.controller.selectedVariant.value = 0;
 
-                              Get.defaultDialog(
-                                backgroundColor: AppColors.textColorWhite,
-                                titleStyle: TextStyle(
-                                  color: AppColors.primaryColor,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 20,
-                                  vertical: 10,
-                                ),
-                                titlePadding: EdgeInsets.symmetric(
-                                  horizontal: 20,
-                                  vertical: 10,
-                                ),
-                                radius: 8,
-                                title: 'Select Variant & Quantity For ${product.name ?? ''}',
-                                content: StatefulBuilder(
-                                  builder: (context, setStateDialog) {
-                                    return Column(
-                                      children: [
-                                        Text(
-                                          'Select product variant to add to the order',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: AppColors.textColor,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                        SizedBox(height: 10),
-                                        if (variants.isEmpty)
-                                          Text(
-                                            'No variants available.',
-                                            style: TextStyle(
-                                              color: AppColors.warningColor,
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        Column(
-                                          children: List<Widget>.generate(
-                                            variants.length,
-                                            (variantIndex) {
-                                              final variant =
-                                                  variants[variantIndex];
-                                              return Row(
-                                                children: [
-                                                  Switch(
-                                                    value:
-                                                        variantIndex ==
-                                                        widget
-                                                            .controller
-                                                            .selectedVariant
-                                                            .value,
-                                                    onChanged: (value) {
-                                                      widget
-                                                              .controller
-                                                              .selectedVariant
-                                                              .value =
-                                                          variantIndex;
-                                                      dialogSelectedVariantIndex =
-                                                          variantIndex;
-                                                      setStateDialog(() {});
-                                                    },
+                                    Get.defaultDialog(
+                                      backgroundColor: AppColors.textColorWhite,
+                                      titleStyle: TextStyle(
+                                        color: AppColors.primaryColor,
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                        vertical: 10,
+                                      ),
+                                      titlePadding: EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                        vertical: 10,
+                                      ),
+                                      radius: 8,
+                                      title:
+                                          'Select Variant & Quantity For ${product.name ?? ''}',
+                                      content: StatefulBuilder(
+                                        builder: (context, setStateDialog) {
+                                          return Column(
+                                            children: [
+                                              Text(
+                                                'Select product variant to add to the order',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  color: AppColors.textColor,
+                                                  fontSize: 18,
+                                                ),
+                                              ),
+                                              SizedBox(height: 10),
+                                              if (variants.isEmpty)
+                                                Text(
+                                                  'No variants available.',
+                                                  style: TextStyle(
+                                                    color:
+                                                        AppColors.warningColor,
+                                                    fontSize: 16,
                                                   ),
-                                                  SizedBox(width: 8),
-                                                  Expanded(
-                                                    child: Text(
-                                                      variant.name ?? '',
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                      ),
-                                                    ),
+                                                ),
+                                              Column(
+                                                children: List<Widget>.generate(
+                                                  variants.length,
+                                                  (variantIndex) {
+                                                    final variant =
+                                                        variants[variantIndex];
+                                                    return Row(
+                                                      children: [
+                                                        Switch(
+                                                          value:
+                                                              variantIndex ==
+                                                              widget
+                                                                  .controller
+                                                                  .selectedVariant
+                                                                  .value,
+                                                          onChanged: (value) {
+                                                            widget
+                                                                    .controller
+                                                                    .selectedVariant
+                                                                    .value =
+                                                                variantIndex;
+                                                            dialogSelectedVariantIndex =
+                                                                variantIndex;
+                                                            setStateDialog(
+                                                              () {},
+                                                            );
+                                                          },
+                                                        ),
+                                                        SizedBox(width: 8),
+                                                        Expanded(
+                                                          child: Text(
+                                                            variant.name ?? '',
+                                                            style: TextStyle(
+                                                              fontSize: 16,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          variant.price
+                                                                  ?.toStringAsFixed(
+                                                                    2,
+                                                                  ) ??
+                                                              '0.00',
+                                                          style: TextStyle(
+                                                            fontSize: 16,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                              SizedBox(height: 10),
+                                              TextField(
+                                                controller: qtyController,
+                                                decoration: InputDecoration(
+                                                  labelText: "Quantity",
+                                                  hintText:
+                                                      "Enter the quantity here...",
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          8,
+                                                        ),
                                                   ),
-                                                  Text(
-                                                    variant.price
-                                                            ?.toStringAsFixed(
-                                                              2,
-                                                            ) ??
-                                                        '0.00',
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                    ),
-                                                  ),
+                                                ),
+                                                keyboardType:
+                                                    TextInputType.number,
+                                                inputFormatters: [
+                                                  FilteringTextInputFormatter
+                                                      .digitsOnly,
                                                 ],
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                        SizedBox(height: 10),
-                                        TextField(
-                                          controller: qtyController,
-                                          decoration: InputDecoration(
-                                            labelText: "Quantity",
-                                            hintText:
-                                                "Enter the quantity here...",
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                          ),
-                                          keyboardType: TextInputType.number,
-                                          inputFormatters: [
-                                            FilteringTextInputFormatter
-                                                .digitsOnly,
-                                          ],
-                                        ),
-                                        SizedBox(height: 10),
-                                      ],
+                                              ),
+                                              SizedBox(height: 10),
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                      confirm: CommonButton(
+                                        width: 100,
+                                        text: "Add",
+                                        onTap: () {
+                                          int quantity =
+                                              int.tryParse(
+                                                qtyController.text.trim(),
+                                              ) ??
+                                              1;
+                                          if (quantity <= 0) quantity = 1;
+                                          var variant =
+                                              variants.isNotEmpty &&
+                                                  dialogSelectedVariantIndex !=
+                                                      null
+                                              ? variants[dialogSelectedVariantIndex!]
+                                              : null;
+                                          if (variant?.id == null) {
+                                            return;
+                                          } else {
+                                            widget.controller.addItemToOrder(
+                                              product,
+                                              variant,
+                                              quantity,
+                                            );
+                                            Get.back();
+                                          }
+                                        },
+                                      ),
+                                      cancel: CommonButton(
+                                        width: 100,
+                                        text: "Cancel",
+                                        color: AppColors.textColorWhite,
+                                        textColor: AppColors.primaryColor,
+                                        onTap: () {
+                                          Get.back();
+                                        },
+                                      ),
                                     );
                                   },
+                                  child: Icon(
+                                    Icons.add_shopping_cart_outlined,
+                                    size: 40,
+                                  ),
                                 ),
-                                confirm: CommonButton(
-                                  width: 100,
-                                  text: "Add",
-                                  onTap: () {
-                                    int quantity =
-                                        int.tryParse(
-                                          qtyController.text.trim(),
-                                        ) ??
-                                        1;
-                                    if (quantity <= 0) quantity = 1;
-                                    var variant =
-                                        variants.isNotEmpty &&
-                                            dialogSelectedVariantIndex != null
-                                        ? variants[dialogSelectedVariantIndex!]
-                                        : null;
-                                    if (variant?.id == null) {
-                                      return;
-                                    } else {
-                                      widget.controller.addItemToOrder(
-                                        product,
-                                        variant,
-                                        quantity,
-                                      );
-                                      Get.back();
-                                    }
-                                  },
-                                ),
-                                cancel: CommonButton(
-                                  width: 100,
-                                  text: "Cancel",
-                                  color: AppColors.textColorWhite,
-                                  textColor: AppColors.primaryColor,
-                                  onTap: () {
-                                    Get.back();
-                                  },
-                                ),
-                              );
-                            },
-                            child: Icon(
-                              Icons.add_shopping_cart_outlined,
-                              size: 40,
-                            ),
-                          ),
                         );
                       },
                       separatorBuilder: (context, index) {

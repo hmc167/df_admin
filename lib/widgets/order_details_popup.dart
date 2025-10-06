@@ -543,30 +543,7 @@ class _OrderDetailsPopupState extends State<OrderDetailsPopup> {
                           ),
                         ],
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            'Discount :',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: AppColors.textColor,
-                            ),
-                            textAlign: TextAlign.left,
-                          ),
-                          SizedBox(
-                            width: 200,
-                            child: Text(
-                              order?.discount?.toStringAsFixed(2) ?? '0.00',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: AppColors.textColor,
-                              ),
-                              textAlign: TextAlign.right,
-                            ),
-                          ),
-                        ],
-                      ),
+                      
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -617,6 +594,7 @@ class _OrderDetailsPopupState extends State<OrderDetailsPopup> {
                           ),
                         ],
                       ),
+                      if ((order?.handlingCharges ?? 0) > 0)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -642,6 +620,30 @@ class _OrderDetailsPopupState extends State<OrderDetailsPopup> {
                           ),
                         ],
                       ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.end,
+                      //   children: [
+                      //     Text(
+                      //       'Discount :',
+                      //       style: TextStyle(
+                      //         fontSize: 18,
+                      //         color: AppColors.textColor,
+                      //       ),
+                      //       textAlign: TextAlign.left,
+                      //     ),
+                      //     SizedBox(
+                      //       width: 200,
+                      //       child: Text(
+                      //         '-${order?.discount?.toStringAsFixed(2) ?? '0.00'}',
+                      //         style: TextStyle(
+                      //           fontSize: 18,
+                      //           color: AppColors.textColor,
+                      //         ),
+                      //         textAlign: TextAlign.right,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -665,6 +667,20 @@ class _OrderDetailsPopupState extends State<OrderDetailsPopup> {
                               ),
                               textAlign: TextAlign.right,
                             ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [                          
+                          Text(
+                            'Saved ${order?.discount?.toStringAsFixed(2) ?? '0.00'}',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.successColor,
+                            ),
+                            textAlign: TextAlign.right,
                           ),
                         ],
                       ),

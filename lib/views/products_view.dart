@@ -20,16 +20,18 @@ class _ProductsViewState extends State<ProductsView> {
   @override
   void initState() {
     super.initState();
-    final args = Get.arguments;
-    if (args != null && args is Map && args['status'] != null) {
-      controller.filterStatus.value = args['status'] as int;
-      controller.searchProducts();
-    } else if (args != null && args is Map && args['search'] != null) {
-      controller.filterNameController.text = args['search'] as String;
-      controller.searchProducts();
-    } else {
-      controller.loadData();
-    }
+    Future.delayed(const Duration(milliseconds: 300), () {
+      final args = Get.arguments;
+      if (args != null && args is Map && args['status'] != null) {
+        controller.filterStatus.value = args['status'] as int;
+        controller.searchProducts();
+      } else if (args != null && args is Map && args['search'] != null) {
+        controller.filterNameController.text = args['search'] as String;
+        controller.searchProducts();
+      } else {
+        controller.loadData();
+      }
+    });
   }
 
   @override
@@ -222,7 +224,7 @@ class _ProductsViewState extends State<ProductsView> {
             Divider(),
             Expanded(
               child: Obx(
-                () => ListView(
+                () =>  ListView(
                   children: [
                     ...List.generate(controller.products.length, (index) {
                       var product = controller.products[index];
@@ -352,7 +354,7 @@ class _ProductsViewState extends State<ProductsView> {
                         ),
                       );
                     }),
-                    if (controller.products.isEmpty)
+                    if (controller.products.isEmpty && controller.isLoading.value == false)
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 10,

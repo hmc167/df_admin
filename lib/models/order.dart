@@ -263,6 +263,7 @@ class OrderDetailData {
   int? customerId;
   String? customerName;
   String? invoiceNumber;
+  double? mainProductTotal;
   double? productTotal;
   double? mainDeliveryCharges;
   double? deliveryCharges;
@@ -304,6 +305,7 @@ class OrderDetailData {
       this.customerId,
       this.customerName,
       this.invoiceNumber,
+      this.mainProductTotal,
       this.productTotal,
       this.mainDeliveryCharges,
       this.deliveryCharges,
@@ -345,6 +347,7 @@ class OrderDetailData {
     customerId = json['CustomerId'];
     customerName = json['CustomerName'];
     invoiceNumber = json['InvoiceNumber'];
+    mainProductTotal = (json['MainProductTotal'] as num?)?.toDouble();
     productTotal = (json['ProductTotal'] as num?)?.toDouble();
     mainDeliveryCharges = (json['MainDeliveryCharges'] as num?)?.toDouble();
     deliveryCharges = (json['DeliveryCharges'] as num?)?.toDouble();
@@ -400,6 +403,7 @@ class OrderDetailData {
     data['CustomerId'] = customerId;
     data['CustomerName'] = customerName;
     data['InvoiceNumber'] = invoiceNumber;
+    data['MainProductTotal'] = mainProductTotal;
     data['ProductTotal'] = productTotal;
     data['MainDeliveryCharges'] = mainDeliveryCharges;
     data['DeliveryCharges'] = deliveryCharges;

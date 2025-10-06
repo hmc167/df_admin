@@ -115,7 +115,9 @@ Widget getAppDrawer() {
           children: [
             ListTile(
               title: Text('Category', style: TextStyle(color: Colors.black)),
-              onTap: () {
+              onTap: loginController.selectedMenu.value == 'Products-Category'
+                  ? null
+                  : () {
                 loginController.selectMenu('Products-Category');
                 Get.offAllNamed(Routes.PRODUCTCATEGORY);
               },
@@ -128,7 +130,9 @@ Widget getAppDrawer() {
                 'Unit - Variant',
                 style: TextStyle(color: Colors.black),
               ),
-              onTap: () {
+              onTap: loginController.selectedMenu.value == 'Products-UnitVariant'
+                  ? null
+                  : () {
                 loginController.selectMenu('Products-UnitVariant');
                 Get.offAllNamed(Routes.UNITVARIANT);
               },
@@ -162,7 +166,9 @@ Widget getAppDrawer() {
             // ),
             ListTile(
               title: Text('New Arrival', style: TextStyle(color: Colors.black)),
-              onTap: () {
+              onTap: loginController.selectedMenu.value == 'Products-NewArrival'
+                  ? null
+                  : () {
                 loginController.selectMenu('Products-NewArrival');
                 Get.offAllNamed(Routes.NEWARRIVAL);
               },
@@ -175,7 +181,9 @@ Widget getAppDrawer() {
                 'Suggests Product',
                 style: TextStyle(color: Colors.black),
               ),
-              onTap: () {
+              onTap: loginController.selectedMenu.value == 'Products-SuggestsProduct'
+                  ? null
+                  : () {
                 loginController.selectMenu('Products-SuggestsProduct');
                 Get.offAllNamed(Routes.SUGGESTSPRODUCT);
               },
@@ -196,7 +204,9 @@ Widget getAppDrawer() {
           children: [
             ListTile(
               title: Text('Customers', style: TextStyle(color: Colors.black)),
-              onTap: () {
+              onTap: loginController.selectedMenu.value == 'Customers-Customers'
+                  ? null
+                  : () {
                 loginController.selectMenu('Customers-Customers');
                 Get.offAllNamed(Routes.CUSTOMERS);
               },
@@ -209,7 +219,9 @@ Widget getAppDrawer() {
                 'Customer Inquiry',
                 style: TextStyle(color: Colors.black),
               ),
-              onTap: () {
+              onTap: loginController.selectedMenu.value == 'Customers-CustomerInquiry'
+                  ? null
+                  : () {
                 loginController.selectMenu('Customers-CustomerInquiry');
                 // Replace with your route for Customer Inquiry
                 Get.offAllNamed(Routes.CUSTOMERINQUIRY);
@@ -231,7 +243,9 @@ Widget getAppDrawer() {
           children: [
             ListTile(
               title: Text('Farmers', style: TextStyle(color: Colors.black)),
-              onTap: () {
+              onTap: loginController.selectedMenu.value == 'Farmers'
+                  ? null
+                  : () {
                 loginController.selectMenu('Farmers');
                 Get.offAllNamed(Routes.FARMERS);
               },
@@ -240,7 +254,9 @@ Widget getAppDrawer() {
             ),
             ListTile(
               title: Text('Accounts', style: TextStyle(color: Colors.black)),
-              onTap: () {
+              onTap: loginController.selectedMenu.value == 'Farmers-Accounts'
+                  ? null
+                  : () {
                 loginController.selectMenu('Farmers-Accounts');
                 Get.offAllNamed(Routes.FARMERSACCOUNT);
               },
@@ -260,7 +276,9 @@ Widget getAppDrawer() {
           children: [
             ListTile(
               title: Text('Order', style: TextStyle(color: Colors.black)),
-              onTap: () {
+              onTap: loginController.selectedMenu.value == 'Orders-Order'
+                  ? null
+                  : () {
                 loginController.selectMenu('Orders-Order');
                 Get.offAllNamed(Routes.ORDERS);
               },
@@ -272,7 +290,9 @@ Widget getAppDrawer() {
                 'UnLock Requests',
                 style: TextStyle(color: Colors.black),
               ),
-              onTap: () {
+              onTap: loginController.selectedMenu.value == 'Orders-DailyOrders'
+                  ? null
+                  : () {
                 loginController.selectMenu('Orders-DailyOrders');
                 Get.offAllNamed(Routes.DAILYORDERS);
               },
@@ -295,7 +315,9 @@ Widget getAppDrawer() {
                 'Advertisement',
                 style: TextStyle(color: Colors.black),
               ),
-              onTap: () {
+              onTap: loginController.selectedMenu.value == 'Promotion-Advertisement'
+                  ? null
+                  : () {
                 loginController.selectMenu('Promotion-Advertisement');
                 // Replace with your route for Advertisement
                 Get.offAllNamed(Routes.ADVERTISEMENTS);
@@ -310,7 +332,9 @@ Widget getAppDrawer() {
                 'Home Sliders',
                 style: TextStyle(color: Colors.black),
               ),
-              onTap: () {
+              onTap: loginController.selectedMenu.value == 'Promotion-HomeSliders'
+                  ? null
+                  : () {
                 loginController.selectMenu('Promotion-HomeSliders');
                 // Replace with your route for Home Sliders
                 Get.offAllNamed(Routes.HOMESLIDERS);
@@ -334,7 +358,9 @@ Widget getAppDrawer() {
                 'Expense Category',
                 style: TextStyle(color: Colors.black),
               ),
-              onTap: () {
+              onTap: loginController.selectedMenu.value == 'Expense-Category'
+                  ? null
+                  : () {
                 loginController.selectMenu('Expense-Category');
                 Get.offAllNamed(Routes.EXPENSECATEGORY);
               },
@@ -344,7 +370,9 @@ Widget getAppDrawer() {
             ),
             ListTile(
               title: Text('Expenses', style: TextStyle(color: Colors.black)),
-              onTap: () {
+               onTap: loginController.selectedMenu.value == 'Expense-Expenses'
+                  ? null
+                  : () {
                 loginController.selectMenu('Expense-Expenses');
                 Get.offAllNamed(Routes.EXPENSES);
               },
@@ -367,7 +395,9 @@ Widget getAppDrawer() {
                 'Delivery Zone (Cluster)',
                 style: TextStyle(color: Colors.black),
               ),
-              onTap: () {
+               onTap: loginController.selectedMenu.value == 'Customers-Cluster'
+                  ? null
+                  : () {
                 loginController.selectMenu('Customers-Cluster');
                 // Replace with your route for Cluster
                 Get.offAllNamed(Routes.DELIVERYZONE);
@@ -381,7 +411,9 @@ Widget getAppDrawer() {
                 'Cluster Wise Platform Fees',
                 style: TextStyle(color: Colors.black),
               ),
-              onTap: () {
+               onTap: loginController.selectedMenu.value == 'Settings-ClusterPlatformFees'
+                  ? null
+                  : () {
                 loginController.selectMenu('Settings-ClusterPlatformFees');
                 Get.offAllNamed(Routes.PLATFORMFEES);
               },
@@ -395,7 +427,9 @@ Widget getAppDrawer() {
                 'Cluster Wise Delivery Charge',
                 style: TextStyle(color: Colors.black),
               ),
-              onTap: () {
+               onTap: loginController.selectedMenu.value == 'Settings-ClusterDeliveryCharge'
+                  ? null
+                  : () {
                 loginController.selectMenu('Settings-ClusterDeliveryCharge');
                 Get.offAllNamed(Routes.DELIVERYCHARGE);
               },
@@ -406,7 +440,9 @@ Widget getAppDrawer() {
             ),
             ListTile(
               title: Text('Tax Master', style: TextStyle(color: Colors.black)),
-              onTap: () {
+               onTap: loginController.selectedMenu.value == 'Settings-TaxMaster'
+                  ? null
+                  : () {
                 loginController.selectMenu('Settings-TaxMaster');
                 Get.offAllNamed(Routes.TAXMASTER);
               },
@@ -429,7 +465,9 @@ Widget getAppDrawer() {
                     'State & District',
                     style: TextStyle(color: Colors.black),
                   ),
-                  onTap: () {
+                   onTap: loginController.selectedMenu.value == 'Location-State-District'
+                  ? null
+                  : () {
                     loginController.selectMenu('Location-State-District');
                     Get.offAllNamed(Routes.STATEDISTRICT);
                   },
@@ -440,7 +478,9 @@ Widget getAppDrawer() {
                 ),
                 ListTile(
                   title: Text('Taluka', style: TextStyle(color: Colors.black)),
-                  onTap: () {
+                   onTap: loginController.selectedMenu.value == 'Location-Taluka'
+                  ? null
+                  : () {
                     loginController.selectMenu('Location-Taluka');
                     Get.offAllNamed(Routes.TALUKA);
                   },
@@ -453,7 +493,9 @@ Widget getAppDrawer() {
                     'Village/Town with Pincode',
                     style: TextStyle(color: Colors.black),
                   ),
-                  onTap: () {
+                   onTap: loginController.selectedMenu.value == 'Location-VillageTownPincode'
+                  ? null
+                  : () {
                     loginController.selectMenu('Location-VillageTownPincode');
                     Get.offAllNamed(Routes.VILLAGEPINCODE);
                   },
@@ -476,7 +518,9 @@ Widget getAppDrawer() {
           children: [
             ListTile(
               title: Text('Modules', style: TextStyle(color: Colors.black)),
-              onTap: () {
+              onTap: loginController.selectedMenu.value == 'User-Modules'
+                  ? null
+                  : () {
                 loginController.selectMenu('User-Modules');
                 Get.offAllNamed(Routes.USERMODULES);
               },
@@ -485,7 +529,9 @@ Widget getAppDrawer() {
             ),
             ListTile(
               title: Text('Role Rights', style: TextStyle(color: Colors.black)),
-              onTap: () {
+              onTap: loginController.selectedMenu.value == 'User-RoleRights'
+                  ? null
+                  : () {
                 loginController.selectMenu('User-RoleRights');
                 Get.offAllNamed(Routes.ROLERIGHTS);
               },
@@ -494,7 +540,9 @@ Widget getAppDrawer() {
             ),
             ListTile(
               title: Text('Users', style: TextStyle(color: Colors.black)),
-              onTap: () {
+              onTap: loginController.selectedMenu.value == 'User-Users'
+                  ? null
+                  : () {
                 loginController.selectMenu('User-Users');
                 Get.offAllNamed(Routes.USERS);
               },
@@ -513,7 +561,9 @@ Widget getAppDrawer() {
           children: [
             ListTile(
               title: Text('Order', style: TextStyle(color: Colors.black)),
-              onTap: () {
+              onTap: loginController.selectedMenu.value == 'Reports-Order'
+                  ? null
+                  : () {
                 loginController.selectMenu('Reports-Order');
                 Get.offAllNamed(Routes.REPORTORDER);
               },
@@ -522,7 +572,9 @@ Widget getAppDrawer() {
             ),
             ListTile(
               title: Text('Customer', style: TextStyle(color: Colors.black)),
-              onTap: () {
+              onTap: loginController.selectedMenu.value == 'Reports-Customer'
+                  ? null
+                  : () {
                 loginController.selectMenu('Reports-Customer');
                 Get.offAllNamed(Routes.REPORTCUSTOMER);
               },
@@ -535,7 +587,9 @@ Widget getAppDrawer() {
                 'Daily Order Product',
                 style: TextStyle(color: Colors.black),
               ),
-              onTap: () {
+              onTap: loginController.selectedMenu.value == 'Reports-DailyOrderProduct'
+                  ? null
+                  : () {
                 loginController.selectMenu('Reports-DailyOrderProduct');
                 Get.offAllNamed(Routes.REPORTDAILYORDERPRODUCT);
               },
@@ -546,7 +600,9 @@ Widget getAppDrawer() {
             ),
             ListTile(
               title: Text('Product', style: TextStyle(color: Colors.black)),
-              onTap: () {
+              onTap: loginController.selectedMenu.value == 'Reports-Product'
+                  ? null
+                  : () {
                 loginController.selectMenu('Reports-Product');
                 Get.offAllNamed(Routes.REPORTPRODUCT);
               },
@@ -558,7 +614,9 @@ Widget getAppDrawer() {
                 'Farmers Account',
                 style: TextStyle(color: Colors.black),
               ),
-              onTap: () {
+              onTap: loginController.selectedMenu.value == 'Reports-FarmersAccount'
+                  ? null
+                  : () {
                 loginController.selectMenu('Reports-FarmersAccount');
                 Get.offAllNamed(Routes.REPORTFARMERSACCOUNT);
               },
@@ -572,7 +630,9 @@ Widget getAppDrawer() {
                 'Daily Farmers Account',
                 style: TextStyle(color: Colors.black),
               ),
-              onTap: () {
+              onTap: loginController.selectedMenu.value == 'Reports-DailyFarmersAccount'
+                  ? null
+                  : () {
                 loginController.selectMenu('Reports-DailyFarmersAccount');
                 Get.offAllNamed(Routes.REPORTDAILYFARMERSACCOUNT);
               },
@@ -583,7 +643,9 @@ Widget getAppDrawer() {
             ),
             ListTile(
               title: Text('Expenses', style: TextStyle(color: Colors.black)),
-              onTap: () {
+              onTap: loginController.selectedMenu.value == 'Reports-Expenses'
+                  ? null
+                  : () {
                 loginController.selectMenu('Reports-Expenses');
                 Get.offAllNamed(Routes.REPORTEXPENSES);
               },
@@ -601,10 +663,12 @@ Widget getAppDrawer() {
               children: [
                 ListTile(
                   title: Text('Users', style: TextStyle(color: Colors.black)),
-                  onTap: () {
-                    loginController.selectMenu('Reports-Users');
-                    Get.offAllNamed(Routes.REPORTUSERS);
-                  },
+                  onTap: loginController.selectedMenu.value == 'Reports-Users'
+                      ? null
+                      : () {
+                          loginController.selectMenu('Reports-Users');
+                          Get.offAllNamed(Routes.REPORTUSERS);
+                        },
                   selected:
                       loginController.selectedMenu.value == 'Reports-Users',
                   selectedTileColor: Colors.blueGrey[100],
@@ -614,10 +678,12 @@ Widget getAppDrawer() {
                     'Users Activity',
                     style: TextStyle(color: Colors.black),
                   ),
-                  onTap: () {
-                    loginController.selectMenu('Reports-UsersActivity');
-                    Get.offAllNamed(Routes.REPORTUSERACTIVITY);
-                  },
+                  onTap: loginController.selectedMenu.value == 'Reports-UsersActivity'
+                      ? null
+                      : () {
+                          loginController.selectMenu('Reports-UsersActivity');
+                          Get.offAllNamed(Routes.REPORTUSERACTIVITY);
+                        },
                   selected:
                       loginController.selectedMenu.value ==
                       'Reports-UsersActivity',
@@ -636,7 +702,9 @@ Widget getAppDrawer() {
               children: [
                 ListTile(
                   title: Text('Daily', style: TextStyle(color: Colors.black)),
-                  onTap: () {
+                  onTap: loginController.selectedMenu.value == 'Reports-Balance-Daily'
+                  ? null
+                  : () {
                     loginController.selectMenu('Reports-Balance-Daily');
                     Get.offAllNamed(Routes.BALANCEDAILY);
                   },
@@ -647,7 +715,9 @@ Widget getAppDrawer() {
                 ),
                 ListTile(
                   title: Text('Weekly', style: TextStyle(color: Colors.black)),
-                  onTap: () {
+                  onTap: loginController.selectedMenu.value == 'Reports-Balance-Weekly'
+                  ? null
+                  : () {
                     loginController.selectMenu('Reports-Balance-Weekly');
                     Get.offAllNamed(Routes.BALANCEWEEKLY);
                   },
@@ -658,7 +728,9 @@ Widget getAppDrawer() {
                 ),
                 ListTile(
                   title: Text('Monthly', style: TextStyle(color: Colors.black)),
-                  onTap: () {
+                  onTap: loginController.selectedMenu.value == 'Reports-Balance-Monthly'
+                  ? null
+                  : () {
                     loginController.selectMenu('Reports-Balance-Monthly');
                     Get.offAllNamed(Routes.BALANCEMONTHLY);
                   },
@@ -672,7 +744,9 @@ Widget getAppDrawer() {
                     'Date Range',
                     style: TextStyle(color: Colors.black),
                   ),
-                  onTap: () {
+                  onTap: loginController.selectedMenu.value == 'Reports-Balance-DateRange'
+                  ? null
+                  : () {
                     loginController.selectMenu('Reports-Balance-DateRange');
                     Get.offAllNamed(Routes.BALANCEDATERANGE);
                   },
