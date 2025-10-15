@@ -42,6 +42,9 @@ class ProductsController extends GetxController {
   final storageTipsController = TextEditingController();
   final shelfLifeController = TextEditingController();
   final searchKeyController = TextEditingController();
+  final brandController = TextEditingController();
+  final hsnCodeController = TextEditingController();
+  final skuIDController = TextEditingController();
 
   final nameFocusNode = FocusNode();
   final parentCategoryFocusNode = FocusNode();
@@ -102,6 +105,10 @@ class ProductsController extends GetxController {
     shelfLifeController.clear();
     searchKeyController.clear();
 
+    brandController.clear();
+    hsnCodeController.clear();
+    skuIDController.clear();
+
     imagesList.value = [];
     clusterMappings.value = [];
 
@@ -140,6 +147,9 @@ class ProductsController extends GetxController {
     storageTipsController.text = product.storageTips ?? '';
     shelfLifeController.text = (product.shelfLife ?? 0).toString();
     searchKeyController.text = product.searchKey ?? '';
+    brandController.text = product.brand ?? '';
+    hsnCodeController.text = product.hsnCode ?? '';
+    skuIDController.text = product.skuID ?? '';
 
     await Helpers.showPopup(
       Column(
@@ -311,6 +321,45 @@ class ProductsController extends GetxController {
                                 spacing: 20,
                                 children: [
                                   Expanded(
+                                    child: TextFormField(
+                                      controller: brandController,
+                                      decoration: InputDecoration(
+                                        hintText: 'Brand',
+                                        labelText: 'Brand',
+                                        border: OutlineInputBorder(),
+                                      ),
+                                      keyboardType: TextInputType.text,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: TextFormField(
+                                      controller: hsnCodeController,
+                                      decoration: InputDecoration(
+                                        hintText: 'HSN Code',
+                                        labelText: 'HSN Code',
+                                        border: OutlineInputBorder(),
+                                      ),
+                                      keyboardType: TextInputType.text,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: TextFormField(
+                                      controller: skuIDController,
+                                      decoration: InputDecoration(
+                                        hintText: 'SKU ID',
+                                        labelText: 'SKU ID',
+                                        border: OutlineInputBorder(),
+                                      ),
+                                      keyboardType: TextInputType.text,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 20),
+                              Row(
+                                spacing: 20,
+                                children: [
+                                  Expanded(
                                     child: Row(
                                       children: [
                                         Text(
@@ -368,9 +417,9 @@ class ProductsController extends GetxController {
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 20),
+                              SizedBox(height: 10),
                               Divider(),
-                              SizedBox(height: 20),
+                              SizedBox(height: 10),
                               Row(
                                 spacing: 20,
                                 children: [
@@ -385,7 +434,7 @@ class ProductsController extends GetxController {
                                       ),
                                       keyboardType: TextInputType.text,
                                       textAlign: TextAlign.start,
-                                      maxLines: 4,
+                                      maxLines: 3,
                                     ),
                                   ),
                                   Expanded(
@@ -399,14 +448,14 @@ class ProductsController extends GetxController {
                                       ),
                                       keyboardType: TextInputType.text,
                                       textAlign: TextAlign.start,
-                                      maxLines: 4,
+                                      maxLines: 3,
                                     ),
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 20),
+                              SizedBox(height: 10),
                               Divider(),
-                              SizedBox(height: 20),
+                              SizedBox(height: 10),
                               Row(
                                 spacing: 20,
                                 children: [
@@ -929,6 +978,9 @@ class ProductsController extends GetxController {
         isActive: status.value,
         productClusterMappings: clusterMappings.value,
         productImages: saveImagesList,
+        brand: brandController.text,
+        hsnCode: hsnCodeController.text,
+        skuID: skuIDController.text,
       );
 
       final result = await ApiServiceProductMaster.save(newProduct);

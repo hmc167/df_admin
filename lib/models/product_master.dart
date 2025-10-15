@@ -152,6 +152,9 @@ class ProductMaster {
   String? storageTips;
   int? shelfLife;
   String? searchKey;
+  String? brand;
+  String? hsnCode;
+  String? skuID;
   int? unitCategoryMasterId;
   String? outOfStockMessage;
   int? minOrderQty;
@@ -181,6 +184,9 @@ class ProductMaster {
     this.outOfStockMessage,
     this.minOrderQty,
     this.taxIds,
+    this.brand,
+    this.hsnCode,
+    this.skuID,
     this.searchKey,
     this.productClusterMappings,
     this.productImages,
@@ -209,6 +215,9 @@ class ProductMaster {
     outOfStockMessage = json['OutOfStockMessage'];
     minOrderQty = json['MinOrderQty'];
     taxIds = json['TaxIds'];
+    brand = json['Brand'];
+    hsnCode = json['HSNCode'];
+    skuID = json['SKUID'];
     searchKey = json['SearchKey'];
     if (json['ProductClusterMappings'] != null) {
       productClusterMappings = <ClusterMappings>[];
@@ -248,6 +257,9 @@ class ProductMaster {
     data['OutOfStockMessage'] = outOfStockMessage;
     data['MinOrderQty'] = minOrderQty;
     data['TaxIds'] = taxIds;
+    data['Brand'] = brand;
+    data['HSNCode'] = hsnCode;
+    data['SKUID'] = skuID;
     data['SearchKey'] = searchKey;
     if (productClusterMappings != null) {
       data['ProductClusterMappings'] = productClusterMappings!

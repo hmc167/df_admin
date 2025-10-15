@@ -70,6 +70,9 @@ class ApiServiceProductMaster {
         "IsActive": product.isActive,
         "TaxIds": product.taxIds ?? '',
         "SearchKey": product.searchKey ?? '',
+        "Brand": product.brand ?? '',
+        "HSNCode": product.hsnCode ?? '',
+        "SKUID": product.skuID ?? '',
         "ClusterMappings": product.productClusterMappings
             ?.map((c) => c.toJson())
             .toList(),
