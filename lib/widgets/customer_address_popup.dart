@@ -276,12 +276,10 @@ class _CustomerAddressPopupState extends State<CustomerAddressPopup> {
                     type: 1,
                     isDefault: true,
                   );
-                  bool isSaved = await widget.controller.saveCustomerAddress(
+                  await widget.controller.saveCustomerAddress(
                     widget.customerMaster.id ?? 0,
                     cAddress,
                   );
-
-                 
                 },
               ),
               const SizedBox(width: 20),

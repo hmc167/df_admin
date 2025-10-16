@@ -162,7 +162,7 @@ class _CustomerAddEditPopupState extends State<CustomerAddEditPopup> {
                     DropdownButton<int>(
                       padding: EdgeInsets.symmetric(horizontal: 10),
                       value: clusterMasterId.value,
-                      hint: Text('Status'),
+                      hint: Text('Cluster'),
                       borderRadius: BorderRadius.zero,
                       underline: const DropdownButtonHideUnderline(
                         child: SizedBox.shrink(),
